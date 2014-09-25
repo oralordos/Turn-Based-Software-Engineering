@@ -2,6 +2,7 @@ package edu.fresnostate.turnbased;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -21,11 +22,12 @@ public class Game extends ApplicationAdapter {
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-		//img = new Texture("badlogic.jpg");
+		// img = new Texture("badlogic.jpg");
 		map = new TmxMapLoader().load("test.tmx");
 		renderer = new OrthogonalTiledMapRenderer(map);
-		cam = new OrthographicCamera(640, 480);
+		cam = new OrthographicCamera(800, 800);
 		cam.translate(new Vector2(320, 240));
+		cam.update();
 	}
 
 	@Override
@@ -37,5 +39,10 @@ public class Game extends ApplicationAdapter {
 		//batch.begin();
 		//batch.draw(img, 0, 0);
 		//batch.end();
+		
+		if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE))
+		{
+			Gdx.app.exit();
+		}
 	}
 }
