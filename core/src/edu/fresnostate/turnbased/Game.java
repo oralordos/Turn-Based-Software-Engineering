@@ -3,11 +3,11 @@ package edu.fresnostate.turnbased;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.input.GestureDetector;
+import com.badlogic.gdx.input.GestureDetector.GestureListener;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -21,8 +21,72 @@ public class Game extends ApplicationAdapter
 	TiledMap					map;
 	OrthogonalTiledMapRenderer	renderer;
 	OrthographicCamera			cam;
-	private int					oldX;
-	private int					oldY;
+
+	private GestureListener listener = new GestureListener()
+	{
+		private float lastInitial = -1.0f;
+		private float lastZoom = -1.0f;
+		
+		@Override
+		public boolean zoom (float initialDistance, float distance)
+		{
+			if(lastInitial != initialDistance)
+			{
+				lastInitial = initialDistance;
+				lastZoom = 1.0f;
+			}
+			float zoom = initialDistance / distance;
+			cam.zoom *= zoom / lastZoom;
+			cam.update ();
+			lastZoom = zoom;
+			return true;
+		}
+		
+		@Override
+		public boolean touchDown (float x, float y, int pointer, int button)
+		{
+			return false;
+		}
+		
+		@Override
+		public boolean tap (float x, float y, int count, int button)
+		{
+			return false;
+		}
+		
+		@Override
+		public boolean pinch (Vector2 initialPointer1, Vector2 initialPointer2,
+				Vector2 pointer1, Vector2 pointer2)
+		{
+			return false;
+		}
+		
+		@Override
+		public boolean panStop (float x, float y, int pointer, int button)
+		{
+			return false;
+		}
+		
+		@Override
+		public boolean pan (float x, float y, float deltaX, float deltaY)
+		{
+			cam.translate (-deltaX * cam.zoom, deltaY * cam.zoom);
+			cam.update ();
+			return true;
+		}
+		
+		@Override
+		public boolean longPress (float x, float y)
+		{
+			return false;
+		}
+		
+		@Override
+		public boolean fling (float velocityX, float velocityY, int button)
+		{
+			return false;
+		}
+	};
 
 	@Override
 	public void create ()
@@ -31,9 +95,12 @@ public class Game extends ApplicationAdapter
 		// img = new Texture("badlogic.jpg");
 		map = new TmxMapLoader ().load ("test.tmx");
 		renderer = new OrthogonalTiledMapRenderer (map);
-		cam = new OrthographicCamera (800, 800);
-		cam.translate (new Vector2 (320, 240));
+		int w = Gdx.graphics.getWidth ();
+		int h = Gdx.graphics.getHeight();
+		cam = new OrthographicCamera (w, h);
+		cam.zoom = 2.0f;
 		cam.update ();
+		Gdx.input.setInputProcessor (new GestureDetector (listener));
 	}
 
 	@Override
@@ -49,20 +116,6 @@ public class Game extends ApplicationAdapter
 		if (Gdx.input.isKeyPressed (Input.Keys.ESCAPE))
 		{
 			Gdx.app.exit ();
-		}
-		if (Gdx.input.justTouched ())
-		{
-			oldX = Gdx.input.getX ();
-			oldY = Gdx.input.getY ();
-		}
-		if (Gdx.input.isTouched ())
-		{
-			int x = Gdx.input.getX ();
-			int y = Gdx.input.getY ();
-			cam.translate (oldX - x, y - oldY);
-			cam.update ();
-			oldX = x;
-			oldY = y;
 		}
 	}
 }
