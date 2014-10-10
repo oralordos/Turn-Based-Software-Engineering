@@ -4,7 +4,7 @@ public class DestroyUnitEvent implements Event
 {
 	public final int	unitID;
 
-	DestroyUnitEvent (int unitID)
+	public DestroyUnitEvent (int unitID)
 	{
 		this.unitID = unitID;
 	}

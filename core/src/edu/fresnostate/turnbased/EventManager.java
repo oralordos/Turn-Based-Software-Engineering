@@ -6,14 +6,22 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
+import com.badlogic.gdx.utils.Disposable;
 
 
-public class EventManager
+public class EventManager implements Disposable
 {
+	private static EventManager manager;
+
 	private Map <EventType, List <EventListener>>	listeners;
 	private Queue <Event>							eventQueue;
+	
+	public static void create()
+	{
+		manager = new EventManager();
+	}
 
-	public EventManager ()
+	private EventManager ()
 	{
 		listeners =
 				new EnumMap <EventType, List <EventListener>> (EventType.class);
@@ -62,5 +70,16 @@ public class EventManager
 			}
 			e = eventQueue.poll ();
 		}
+	}
+
+	public static EventManager get ()
+	{
+		return manager;
+	}
+
+	@Override
+	public void dispose ()
+	{
+		manager = null;
 	}
 }

@@ -7,7 +7,7 @@ public class CreateUnitEvent implements Event
 	public final float	x;
 	public final float	y;
 
-	CreateUnitEvent (/* UnitType unitType, */float x, float y)
+	public CreateUnitEvent (/* UnitType unitType, */float x, float y)
 	{
 		// this.unitType = unitType;
 		this.x = x;

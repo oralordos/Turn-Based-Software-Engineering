@@ -4,7 +4,7 @@ public class ChangeCurrentPlayerEvent implements Event
 {
 	public final int	newPlayer;
 
-	ChangeCurrentPlayerEvent (int newPlayer)
+	public ChangeCurrentPlayerEvent (int newPlayer)
 	{
 		this.newPlayer = newPlayer;
 	}
