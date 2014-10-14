@@ -17,6 +17,6 @@ public class CreateUnitEvent implements Event
 	@Override
 	public EventType getEventType ()
 	{
-		return EventType.CreateUnit;
+		return EventType.CREATE_UNIT;
 	}
 }

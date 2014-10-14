@@ -1,10 +1,10 @@
 package edu.fresnostate.turnbased;
 
-public class ChangeCurrentPlayerEvent implements Event
+public class CurrentPlayerChangedEvent implements Event
 {
 	public final int	newPlayer;
 
-	public ChangeCurrentPlayerEvent (int newPlayer)
+	public CurrentPlayerChangedEvent (int newPlayer)
 	{
 		this.newPlayer = newPlayer;
 	}
@@ -12,6 +12,6 @@ public class ChangeCurrentPlayerEvent implements Event
 	@Override
 	public EventType getEventType ()
 	{
-		return EventType.ChangeCurrentPlayer;
+		return EventType.CURRENT_PLAYER_CHANGED;
 	}
 }

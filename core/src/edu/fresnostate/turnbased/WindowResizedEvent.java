@@ -14,6 +14,6 @@ public class WindowResizedEvent implements Event
 	@Override
 	public EventType getEventType ()
 	{
-		return EventType.WindowResized;
+		return EventType.WINDOW_RESIZED;
 	}
 }

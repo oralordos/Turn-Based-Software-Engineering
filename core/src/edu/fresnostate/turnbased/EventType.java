@@ -2,5 +2,5 @@ package edu.fresnostate.turnbased;
 
 public enum EventType
 {
-	DestroyUnit, CreateUnit, WindowResized, ChangeCurrentPlayer
+	UNIT_DESTROYED, CREATE_UNIT, WINDOW_RESIZED, CURRENT_PLAYER_CHANGED
 }

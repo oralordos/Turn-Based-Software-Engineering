@@ -1,10 +1,10 @@
 package edu.fresnostate.turnbased;
 
-public class DestroyUnitEvent implements Event
+public class UnitDestroyedEvent implements Event
 {
 	public final int	unitID;
 
-	public DestroyUnitEvent (int unitID)
+	public UnitDestroyedEvent (int unitID)
 	{
 		this.unitID = unitID;
 	}
@@ -12,6 +12,6 @@ public class DestroyUnitEvent implements Event
 	@Override
 	public EventType getEventType ()
 	{
-		return EventType.DestroyUnit;
+		return EventType.UNIT_DESTROYED;
 	}
 }

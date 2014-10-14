@@ -5,9 +5,9 @@ public class GameLogic implements EventListener
 	public GameLogic ()
 	{
 		EventManager manager = EventManager.get ();
-		manager.addListener (this, EventType.DestroyUnit);
-		manager.addListener (this, EventType.CreateUnit);
-		manager.addListener (this, EventType.ChangeCurrentPlayer);
+		manager.addListener (this, EventType.UNIT_DESTROYED);
+		manager.addListener (this, EventType.CREATE_UNIT);
+		manager.addListener (this, EventType.CURRENT_PLAYER_CHANGED);
 	}
 
 	@Override
@@ -15,21 +15,21 @@ public class GameLogic implements EventListener
 	{
 		switch (e.getEventType ())
 		{
-		case DestroyUnit :
-			handleDestroyUnit ((DestroyUnitEvent) e);
+		case UNIT_DESTROYED :
+			handleDestroyUnit ((UnitDestroyedEvent) e);
 			break;
-		case CreateUnit :
+		case CREATE_UNIT :
 			handleCreateUnit ((CreateUnitEvent) e);
 			break;
-		case ChangeCurrentPlayer :
-			handleChangeCurrentPlayer((ChangeCurrentPlayerEvent)e);
+		case CURRENT_PLAYER_CHANGED :
+			handleChangeCurrentPlayer((CurrentPlayerChangedEvent)e);
 			break;
 		default :
 			break;
 		}
 	}
 
-	private void handleChangeCurrentPlayer (ChangeCurrentPlayerEvent e)
+	private void handleChangeCurrentPlayer (CurrentPlayerChangedEvent e)
 	{
 		// TODO Auto-generated method stub
 	}
@@ -39,7 +39,7 @@ public class GameLogic implements EventListener
 		// TODO Auto-generated method stub
 	}
 
-	private void handleDestroyUnit (DestroyUnitEvent due)
+	private void handleDestroyUnit (UnitDestroyedEvent due)
 	{
 		// TODO Auto-generated method stub
 	}
