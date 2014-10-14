@@ -16,9 +16,18 @@ public class GameLogic implements EventListener
 		case CREATE_UNIT :
 			handleCreateUnit ((CreateUnitEvent) e);
 			break;
+		case ATTACK_UNIT : 
+			handleAttackUnit ((AttackUnitEvent)e);
+			break;
 		default :
 			break;
 		}
+	}
+
+	private void handleAttackUnit (AttackUnitEvent e)
+	{
+		// TODO Auto-generated method stub
+		
 	}
 
 	private void handleCreateUnit (CreateUnitEvent e)
