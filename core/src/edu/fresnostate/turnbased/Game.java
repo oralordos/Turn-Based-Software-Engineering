@@ -13,6 +13,7 @@ import com.badlogic.gdx.input.GestureDetector.GestureListener;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.SerializationException;
 
@@ -198,6 +199,7 @@ public class Game extends ApplicationAdapter
 	@Override
 	public void render ()
 	{
+		handleZoom (); // Controls the camera by updating its position and zoom.
 		Gdx.gl.glClearColor (0, 0, 0, 1);
 		Gdx.gl.glClear (GL20.GL_COLOR_BUFFER_BIT);
 		renderer.setView (cam);
@@ -206,6 +208,28 @@ public class Game extends ApplicationAdapter
 		{
 			Gdx.app.exit ();
 		}
+	}
+
+	public void handleZoom ()
+	{ // Keeps the camera within the bounds of the map.
+		float effectiveViewportWidth = cam.viewportWidth * cam.zoom;
+		float effectiveViewportHeight = cam.viewportHeight * cam.zoom;
+		cam.zoom = MathUtils.clamp (cam.zoom, 0.1f, 100 / cam.viewportWidth);
+		cam.position.x =
+				MathUtils.clamp (cam.position.x, effectiveViewportWidth / 2f,
+						100 - effectiveViewportWidth / 2f);
+		cam.position.y =
+				MathUtils.clamp (cam.position.y, effectiveViewportHeight / 2f,
+						100 - effectiveViewportHeight / 2f);
+	}
+
+	@Override
+	public void resize (int width, int height)
+	{
+		cam.viewportWidth = 30f; // Viewport of 30 units.
+		cam.viewportHeight = 30f * height / width; // Keeps things in
+													// proportion.
+		cam.update ();
 	}
 
 	@Override
