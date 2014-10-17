@@ -199,7 +199,7 @@ public class Game extends ApplicationAdapter
 	@Override
 	public void render ()
 	{
-		handleZoom (); // Controls the camera by updating its position and zoom.
+		handleZoom (); // Controls the camera by updating its zoom and position.
 		Gdx.gl.glClearColor (0, 0, 0, 1);
 		Gdx.gl.glClear (GL20.GL_COLOR_BUFFER_BIT);
 		renderer.setView (cam);
