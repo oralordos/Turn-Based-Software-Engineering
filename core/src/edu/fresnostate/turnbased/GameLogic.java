@@ -17,7 +17,7 @@ public class GameLogic implements EventListener
 			handleCreateUnit ((CreateUnitEvent) e);
 			break;
 		case ATTACK_UNIT : 
-			handleAttackUnit ((AttackUnitEvent)e);
+			handleAttackUnit ((AttackUnitEvent) e);
 			break;
 		default :
 			break;
