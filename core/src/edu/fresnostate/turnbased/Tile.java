@@ -20,8 +20,6 @@ public class Tile {
 		// p.get("maxHealth", Integer.class).getInt()
 		p.get("maxHealth",Integer.class).getInt();
 		
-		
-		
 	}
 
 	public int getMaxHealth() {

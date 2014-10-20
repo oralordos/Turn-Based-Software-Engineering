@@ -230,8 +230,7 @@ public class Game extends ApplicationAdapter
 	            map.getLayers().get(0).setVisible(!map.getLayers().get(0).isVisible());
 	        if(Gdx.input.isKeyPressed(Input.Keys.NUM_2))
 	            map.getLayers().get(1).setVisible(!map.getLayers().get(1).isVisible());
-	 
-	        
+	  
 	        cam.update();
 	 }
 
