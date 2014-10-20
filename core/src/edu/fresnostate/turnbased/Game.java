@@ -167,9 +167,14 @@ public class Game extends ApplicationAdapter
 																		}
 																	};
 
+	
+																	
+																														
 	@Override
 	public void create ()
 	{
+		
+		
 		try
 		{
 			map =
@@ -186,13 +191,19 @@ public class Game extends ApplicationAdapter
 		renderer = new OrthogonalTiledMapRenderer (map, 1.0f / tileSize);
 		float w = Gdx.graphics.getWidth ();
 		float h = Gdx.graphics.getHeight ();
-		cam = new OrthographicCamera (w / tileSize, h / tileSize);
+		cam = new OrthographicCamera (w/tileSize , h/tileSize );
 		cam.zoom = 2.0f;
-		cam.update ();
+		
+		
+		
+		
+		
+		cam.update();
 		multiplexer = new InputMultiplexer ();
 		multiplexer.addProcessor (new GestureDetector (listener));
 		multiplexer.addProcessor (adapter);
 		Gdx.input.setInputProcessor (multiplexer);
+		
 	}
 
 	@Override
@@ -202,11 +213,28 @@ public class Game extends ApplicationAdapter
 		Gdx.gl.glClear (GL20.GL_COLOR_BUFFER_BIT);
 		renderer.setView (cam);
 		renderer.render ();
+		
+
+		
 		if (Gdx.input.isKeyPressed (Input.Keys.ESCAPE))
-		{
-			Gdx.app.exit ();
-		}
-	}
+				Gdx.app.exit ();
+	        if(Gdx.input.isKeyPressed(Input.Keys.LEFT))
+	            cam.translate(-2,0);
+	        if(Gdx.input.isKeyPressed(Input.Keys.RIGHT))
+	            cam.translate(2,0);
+	        if(Gdx.input.isKeyPressed(Input.Keys.UP))
+	            cam.translate(0,2);
+	        if(Gdx.input.isKeyPressed(Input.Keys.DOWN))
+	            cam.translate(0,-2);
+	        if(Gdx.input.isKeyPressed(Input.Keys.NUM_1))
+	            map.getLayers().get(0).setVisible(!map.getLayers().get(0).isVisible());
+	        if(Gdx.input.isKeyPressed(Input.Keys.NUM_2))
+	            map.getLayers().get(1).setVisible(!map.getLayers().get(1).isVisible());
+	 
+	        
+	        cam.update();
+	 }
+
 
 	@Override
 	public void dispose ()
