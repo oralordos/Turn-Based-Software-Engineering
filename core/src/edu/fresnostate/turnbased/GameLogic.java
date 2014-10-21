@@ -26,8 +26,20 @@ public class GameLogic implements EventListener
 
 	private void handleAttackUnit (AttackUnitEvent e)
 	{
-		// TODO Auto-generated method stub
+		// TODO Make sure the attacker's player is the current player
+		Unit attacker = getUnit(e.attackerID);
+		if(attacker.isInRange(e.targetID))
+		{
 		
+			attacker.attack(e.targetID);
+			EventManager.get ().queueEvent (new UnitAttacked(e.attackerID, e.targetID));
+		}
+	}
+
+	private Unit getUnit (int unitID)
+	{
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	private void handleCreateUnit (CreateUnitEvent e)

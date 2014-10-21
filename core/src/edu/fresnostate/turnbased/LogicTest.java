@@ -11,6 +11,7 @@ public class LogicTest extends TestCase
 	protected void setUp () throws Exception
 	{
 		super.setUp ();
+		
 	}
 
 	@After
@@ -20,7 +21,7 @@ public class LogicTest extends TestCase
 	}
 
 	@Test
-	public void test ()
+	public void testGameLogic ()
 	{
 		fail ("Not yet implemented");
 	}
