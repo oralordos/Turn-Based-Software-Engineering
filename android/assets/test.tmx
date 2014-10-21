@@ -1,11 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" renderorder="right-down" width="50" height="50" tilewidth="16" tileheight="16">
+ <properties>
+  <property name="powerup" value="4"/>
+  <property name="red" value=""/>
+ </properties>
  <tileset firstgid="1" name="tileset" tilewidth="16" tileheight="16">
   <image source="tileset.png" width="256" height="128"/>
+  <tile id="38">
+   <properties>
+    <property name="House" value="5"/>
+   </properties>
+  </tile>
+  <tile id="39">
+   <properties>
+    <property name="House" value="5"/>
+   </properties>
+  </tile>
+  <tile id="54">
+   <properties>
+    <property name="House" value="5"/>
+   </properties>
+  </tile>
+  <tile id="55">
+   <properties>
+    <property name="House" value="5"/>
+   </properties>
+  </tile>
  </tileset>
  <layer name="Tile Layer 1" width="50" height="50">
   <data encoding="base64" compression="zlib">
-   eJzt1sEJgDAQRFGvViB4VyvQFrQD7b8S96AXjRqi4Cz5D+aSEHBgkS2KszJwpmq0TBd3nnrMluXizlOPXWNpD2cxPULv/tRbhsNZTI/QOzUe5yqEHlpienRblNFDS2WpE5Oru/3Ik7v9KJXarpHKw64BqOHfiD/kOne59oZvSnP75luU5lbpWwAA8E5pV3mD/QBPmHUAwFdWNqwQIQ==
+   eJzt1s0NwjAMhuFcmQCpdygL8LMBbED3nwRz6KWkJbIjYpP3kXxJWsmfalVO6dMuc+bVXeqxchcpx1NqWrmLlGN2kDouzkpy5N5r6Sx1WZyV5Mi9503Eucr55xzjz7uwK/keYyrL9n7mZGtHrWaOq9TN1o5azRwt7aUGZfVqaz+KZGs/0vK2a2hF2DUAb/g3ooVe567X3IjN09xaevE0t556AQAgOk+7igX7Ab5h1gEAtbwAC1cRBg==
   </data>
  </layer>
 </map>

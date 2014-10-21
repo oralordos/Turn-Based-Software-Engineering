@@ -1,9 +1,8 @@
 package edu.fresnostate.turnbased;
 
-import com.badlogic.gdx.maps.MapProperties;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-
 import java.util.Map;
+
+import com.badlogic.gdx.maps.MapProperties;
 
 public class Tile {
 
@@ -13,12 +12,12 @@ public class Tile {
 	private boolean canCapture;
 	private int capturePoints;
 	private int unitRegen;
-	private int incomeX;
-	private Map<movementCost, Integer> Costs;
+	private Map<ResourceType, Integer> income;
+	private Map<MovementType, Integer> Costs;
 
 	public Tile(MapProperties p) {
 		// p.get("maxHealth", Integer.class).getInt()
-		p.get("maxHealth",Integer.class).getInt();
+		p.get("maxHealth",Integer.class).intValue();
 		
 	}
 
@@ -30,7 +29,7 @@ public class Tile {
 		return Cur_health;
 	}
 
-	public int getmovementcost(movementCost m) {
+	public int getmovementcost(MovementType m) {
 		return Costs.get(m);
 	}
 	
@@ -51,9 +50,9 @@ public class Tile {
 	{
 		return unitRegen;
 	}
-	public int incomeX()
+	public int getincome(ResourceType t)
 	{
-		return incomeX;
+		return income.get(t);
 	}
 	
 }
