@@ -45,7 +45,6 @@ public class Game extends ApplicationAdapter
 																				cam.zoom *=
 																						(1 / MOUSE_WHEEL_ZOOM);
 																			}
-																			cam.update ();
 																			return true;
 																		}
 																	};
@@ -76,7 +75,6 @@ public class Game extends ApplicationAdapter
 																			cam.zoom *=
 																					zoom
 																							/ lastZoom;
-																			cam.update ();
 																			lastZoom =
 																					zoom;
 																			return true;
@@ -143,7 +141,6 @@ public class Game extends ApplicationAdapter
 																					deltaY
 																							* cam.zoom
 																							/ tileSize);
-																			cam.update ();
 																			return true;
 																		}
 
@@ -168,14 +165,9 @@ public class Game extends ApplicationAdapter
 																		}
 																	};
 
-	
-																	
-																														
 	@Override
 	public void create ()
 	{
-		
-		
 		try
 		{
 			map =
@@ -192,19 +184,12 @@ public class Game extends ApplicationAdapter
 		renderer = new OrthogonalTiledMapRenderer (map, 1.0f / tileSize);
 		float w = Gdx.graphics.getWidth ();
 		float h = Gdx.graphics.getHeight ();
-		cam = new OrthographicCamera (w/tileSize , h/tileSize );
+		cam = new OrthographicCamera (w / tileSize, h / tileSize);
 		cam.zoom = 2.0f;
-		
-		
-		
-		
-		
-		cam.update();
 		multiplexer = new InputMultiplexer ();
 		multiplexer.addProcessor (new GestureDetector (listener));
 		multiplexer.addProcessor (adapter);
 		Gdx.input.setInputProcessor (multiplexer);
-		
 	}
 
 	@Override
@@ -213,29 +198,26 @@ public class Game extends ApplicationAdapter
 		handleZoom (); // Controls the camera by updating its zoom and position.
 		Gdx.gl.glClearColor (0, 0, 0, 1);
 		Gdx.gl.glClear (GL20.GL_COLOR_BUFFER_BIT);
+		cam.update ();
 		renderer.setView (cam);
 		renderer.render ();
-		
-
-		
 		if (Gdx.input.isKeyPressed (Input.Keys.ESCAPE))
-				Gdx.app.exit ();
-	        if(Gdx.input.isKeyPressed(Input.Keys.LEFT))
-	            cam.translate(-2,0);
-	        if(Gdx.input.isKeyPressed(Input.Keys.RIGHT))
-	            cam.translate(2,0);
-	        if(Gdx.input.isKeyPressed(Input.Keys.UP))
-	            cam.translate(0,2);
-	        if(Gdx.input.isKeyPressed(Input.Keys.DOWN))
-	            cam.translate(0,-2);
-	        if(Gdx.input.isKeyPressed(Input.Keys.NUM_1))
-	            map.getLayers().get(0).setVisible(!map.getLayers().get(0).isVisible());
-	        if(Gdx.input.isKeyPressed(Input.Keys.NUM_2))
-	            map.getLayers().get(1).setVisible(!map.getLayers().get(1).isVisible());
-	  
-	        cam.update();
-	 }
-
+			Gdx.app.exit ();
+		if (Gdx.input.isKeyPressed (Input.Keys.LEFT))
+			cam.translate ( - 2, 0);
+		if (Gdx.input.isKeyPressed (Input.Keys.RIGHT))
+			cam.translate (2, 0);
+		if (Gdx.input.isKeyPressed (Input.Keys.UP))
+			cam.translate (0, 2);
+		if (Gdx.input.isKeyPressed (Input.Keys.DOWN))
+			cam.translate (0, - 2);
+		if (Gdx.input.isKeyPressed (Input.Keys.NUM_1))
+			map.getLayers ().get (0)
+					.setVisible ( ! map.getLayers ().get (0).isVisible ());
+		if (Gdx.input.isKeyPressed (Input.Keys.NUM_2))
+			map.getLayers ().get (1)
+					.setVisible ( ! map.getLayers ().get (1).isVisible ());
+	}
 
 	public void handleZoom ()
 	{ // Keeps the camera within the bounds of the map.
@@ -256,7 +238,6 @@ public class Game extends ApplicationAdapter
 		cam.viewportWidth = 30f; // Viewport of 30 units.
 		cam.viewportHeight = 30f * height / width; // Keeps things in
 													// proportion.
-		cam.update ();
 	}
 
 	@Override
