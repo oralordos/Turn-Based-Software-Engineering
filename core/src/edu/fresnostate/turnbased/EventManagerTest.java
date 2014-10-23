@@ -55,7 +55,6 @@ public class EventManagerTest extends TestCase implements EventListener
 	@Override
 	public void receiveEvent (Event e)
 	{
-		System.out.println("Got an event");
 		if (e.getEventType () == EventType.UNIT_DESTROYED)
 		{
 			unitDestroyed = (UnitDestroyedEvent) e;
