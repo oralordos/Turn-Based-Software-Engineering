@@ -8,8 +8,9 @@ import junit.framework.TestCase;
 
 public class EventManagerTest extends TestCase implements EventListener
 {
-	private EventManager	manager;
-	private int				unitDestroyedID;
+	private EventManager		manager;
+	private UnitDestroyedEvent	unitDestroyed;
+	private AttackUnitEvent		attackUnit;
 
 	@Before
 	protected void setUp () throws Exception
@@ -18,7 +19,9 @@ public class EventManagerTest extends TestCase implements EventListener
 		EventManager.create ();
 		manager = EventManager.get ();
 		manager.addListener (this, EventType.UNIT_DESTROYED);
-		unitDestroyedID = - 1;
+		manager.addListener (this, EventType.ATTACK_UNIT);
+		unitDestroyed = null;
+		attackUnit = null;
 	}
 
 	@After
@@ -34,15 +37,32 @@ public class EventManagerTest extends TestCase implements EventListener
 		UnitDestroyedEvent e = new UnitDestroyedEvent (0);
 		manager.queueEvent (e);
 		manager.processEvents ();
-		assertEquals (unitDestroyedID, 0);
+		assertEquals (e, unitDestroyed);
+	}
+
+	@Test
+	public void testMultipleEvents ()
+	{
+		UnitDestroyedEvent destroyed = new UnitDestroyedEvent (0);
+		AttackUnitEvent attack = new AttackUnitEvent (1, 0);
+		manager.queueEvent (attack);
+		manager.queueEvent (destroyed);
+		manager.processEvents ();
+		assertEquals (attack, attackUnit);
+		assertEquals (destroyed, unitDestroyed);
 	}
 
 	@Override
 	public void receiveEvent (Event e)
 	{
+		System.out.println("Got an event");
 		if (e.getEventType () == EventType.UNIT_DESTROYED)
 		{
-			unitDestroyedID = ((UnitDestroyedEvent) e).unitID;
+			unitDestroyed = (UnitDestroyedEvent) e;
+		}
+		else if (e.getEventType () == EventType.ATTACK_UNIT)
+		{
+			attackUnit = (AttackUnitEvent) e;
 		}
 	}
 }
