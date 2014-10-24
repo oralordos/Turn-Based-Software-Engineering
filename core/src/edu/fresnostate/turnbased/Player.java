@@ -6,7 +6,7 @@ import java.util.Map;
 
 public class Player
 {
-	public static Map <ResourceType, Integer>	resources;
+	public Map <ResourceType, Integer>	resources;
 
 	public Player ()
 	{
