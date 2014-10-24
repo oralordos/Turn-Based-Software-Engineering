@@ -15,12 +15,12 @@ import edu.fresnostate.turnbased.event.UnitAttackedEvent;
 
 public class GameLogic implements EventListener
 {
-	private List <Player>		playerList;
+	private List <Player> playerList;
 	private Map <Integer, Unit>	units;
 
 	public GameLogic ()
 	{
-		playerList = new ArrayList <Player> ();
+		setPlayerList (new ArrayList <Player> ());
 		units = new HashMap <Integer, Unit> ();
 		EventManager.addListener (this, EventType.CREATE_UNIT);
 	}
@@ -62,5 +62,15 @@ public class GameLogic implements EventListener
 	private void handleCreateUnit (CreateUnitEvent e)
 	{
 		// TODO Auto-generated method stub
+	}
+
+	public List <Player> getPlayerList ()
+	{
+		return playerList;
+	}
+
+	private void setPlayerList (List <Player> playerList)
+	{
+		this.playerList = playerList;
 	}
 }
