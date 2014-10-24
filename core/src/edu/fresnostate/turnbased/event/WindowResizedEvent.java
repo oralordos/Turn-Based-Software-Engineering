@@ -1,4 +1,5 @@
-package edu.fresnostate.turnbased;
+package edu.fresnostate.turnbased.event;
+
 
 public class WindowResizedEvent implements Event
 {

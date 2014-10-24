@@ -1,4 +1,6 @@
-package edu.fresnostate.turnbased;
+package edu.fresnostate.turnbased.event;
+
+import edu.fresnostate.turnbased.UnitType;
 
 public class CreateUnitEvent implements Event
 {

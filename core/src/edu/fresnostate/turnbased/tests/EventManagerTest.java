@@ -1,8 +1,14 @@
-package edu.fresnostate.turnbased;
+package edu.fresnostate.turnbased.tests;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import edu.fresnostate.turnbased.event.AttackUnitEvent;
+import edu.fresnostate.turnbased.event.Event;
+import edu.fresnostate.turnbased.event.EventListener;
+import edu.fresnostate.turnbased.event.EventManager;
+import edu.fresnostate.turnbased.event.EventType;
+import edu.fresnostate.turnbased.event.UnitDestroyedEvent;
 import junit.framework.TestCase;
 
 

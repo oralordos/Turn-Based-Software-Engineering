@@ -4,6 +4,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import edu.fresnostate.turnbased.event.AttackUnitEvent;
+import edu.fresnostate.turnbased.event.CreateUnitEvent;
+import edu.fresnostate.turnbased.event.Event;
+import edu.fresnostate.turnbased.event.EventListener;
+import edu.fresnostate.turnbased.event.EventManager;
+import edu.fresnostate.turnbased.event.EventType;
+import edu.fresnostate.turnbased.event.UnitAttackedEvent;
 
 
 public class GameLogic implements EventListener
@@ -44,7 +51,7 @@ public class GameLogic implements EventListener
 
 			attacker.attack (e.targetID);
 			EventManager.get ().queueEvent (
-					new UnitAttacked (e.attackerID, e.targetID));
+					new UnitAttackedEvent (e.attackerID, e.targetID));
 		}
 	}
 

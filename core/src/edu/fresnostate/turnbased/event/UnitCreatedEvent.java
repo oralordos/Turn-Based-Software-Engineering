@@ -1,10 +1,11 @@
-package edu.fresnostate.turnbased;
+package edu.fresnostate.turnbased.event;
 
-public class UnitCreated implements Event
+
+public class UnitCreatedEvent implements Event
 {
 	public final int unitID;
 	
-	public UnitCreated(int unitID)
+	public UnitCreatedEvent(int unitID)
 	{
 		this.unitID = unitID;
 	}

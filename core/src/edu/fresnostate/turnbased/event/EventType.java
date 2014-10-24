@@ -1,4 +1,4 @@
-package edu.fresnostate.turnbased;
+package edu.fresnostate.turnbased.event;
 
 public enum EventType
 {

@@ -1,4 +1,4 @@
-package edu.fresnostate.turnbased;
+package edu.fresnostate.turnbased.event;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
