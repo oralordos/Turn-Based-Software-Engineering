@@ -1,14 +1,15 @@
 package edu.fresnostate.turnbased;
 
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Map;
 
-public class Player 
+
+public class Player
 {
-	public void PlayerList(LinkedList<Player> PlayerList)
+	public static Map <ResourceType, Integer>	resources;
+
+	public Player ()
 	{
-		PlayerList = new LinkedList<Player>;
-		Map<ResourceType, Integer> resources = new HashMap<ResourceType, Integer>;
+		resources = new HashMap <ResourceType, Integer> ();
 	}
 }
