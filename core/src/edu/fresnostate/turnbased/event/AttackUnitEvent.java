@@ -1,11 +1,27 @@
 package edu.fresnostate.turnbased.event;
 
-
+/**
+ * This event is sent as a request to have a unit attack another unit.
+ * 
+ * @author Daniel
+ */
 public class AttackUnitEvent implements Event
 {
-	public final int attackerID;
-	public final int targetID;
+	/**
+	 * The ID number of the attacking unit.
+	 */
+	public final int	attackerID;
+	/**
+	 * The ID number of the unit to attack.
+	 */
+	public final int	targetID;
 
+	/**
+	 * @param attackerID
+	 *            The ID number of the attacking unit.
+	 * @param targetID
+	 *            The ID number of the unit to attack.
+	 */
 	public AttackUnitEvent (int attackerID, int targetID)
 	{
 		this.attackerID = attackerID;

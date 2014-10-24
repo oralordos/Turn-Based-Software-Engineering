@@ -1,11 +1,28 @@
 package edu.fresnostate.turnbased.event;
 
-
+/**
+ * This event is sent whenever the screen has been resized.
+ * 
+ * @author Daniel
+ *
+ */
 public class WindowResizedEvent implements Event
 {
+	/**
+	 * The new width of the screen.
+	 */
 	public final int	width;
+	/**
+	 * The new height of the screen.
+	 */
 	public final int	height;
 
+	/**
+	 * @param width
+	 *            The new width of the screen.
+	 * @param height
+	 *            The new height of the screen.
+	 */
 	public WindowResizedEvent (int width, int height)
 	{
 		this.width = width;

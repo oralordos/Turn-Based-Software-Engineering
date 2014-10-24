@@ -22,8 +22,7 @@ public class GameLogic implements EventListener
 	{
 		playerList = new ArrayList <Player> ();
 		units = new HashMap <Integer, Unit> ();
-		EventManager manager = EventManager.get ();
-		manager.addListener (this, EventType.CREATE_UNIT);
+		EventManager.addListener (this, EventType.CREATE_UNIT);
 	}
 
 	@Override
@@ -50,7 +49,7 @@ public class GameLogic implements EventListener
 		{
 
 			attacker.attack (e.targetID);
-			EventManager.get ().queueEvent (
+			EventManager.queueEvent (
 					new UnitAttackedEvent (e.attackerID, e.targetID));
 		}
 	}

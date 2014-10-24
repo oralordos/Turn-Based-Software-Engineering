@@ -1,34 +1,38 @@
 package edu.fresnostate.turnbased.event;
 
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
-import com.badlogic.gdx.utils.Disposable;
 
 
-public class EventManager implements Disposable
+/**
+ * A singleton manager for all events. Is used to handle passing events between
+ * sub-systems in the program.
+ * 
+ * @author Daniel
+ *
+ */
+public abstract class EventManager
 {
-	private static EventManager manager;
+	private static Map <EventType, List <EventListener>>	listeners	=
+																				new EnumMap <EventType, List <EventListener>> (
+																						EventType.class);
+	private static Queue <Event>							eventQueue	=
+																				new LinkedList <Event> ();
 
-	private Map <EventType, List <EventListener>>	listeners;
-	private Queue <Event>							eventQueue;
-	
-	public static void create()
-	{
-		manager = new EventManager();
-	}
-
-	private EventManager ()
-	{
-		listeners =
-				new EnumMap <EventType, List <EventListener>> (EventType.class);
-		eventQueue = new ArrayDeque <Event> ();
-	}
-
-	public void addListener (EventListener listener, EventType eventType)
+	/**
+	 * Registers a listener for a specific event.
+	 * 
+	 * @param listener
+	 *            The listener to add.
+	 * @param eventType
+	 *            The EventType to listen for.
+	 */
+	public static void
+			addListener (EventListener listener, EventType eventType)
 	{
 		if ( ! listeners.containsKey (eventType))
 		{
@@ -37,7 +41,17 @@ public class EventManager implements Disposable
 		listeners.get (eventType).add (listener);
 	}
 
-	public boolean removeListener (EventListener listener, EventType eventType)
+	/**
+	 * Deregisters a listener from listening for an event.
+	 * 
+	 * @param listener
+	 *            The listener to remove.
+	 * @param eventType
+	 *            The type to stop listening for.
+	 * @return true if the listener was successfully removed, false otherwise.
+	 */
+	public static boolean removeListener (EventListener listener,
+			EventType eventType)
 	{
 		if (listeners.containsKey (eventType))
 		{
@@ -49,12 +63,21 @@ public class EventManager implements Disposable
 		}
 	}
 
-	public void queueEvent (Event e)
+	/**
+	 * Adds an event to be passed to the listeners.
+	 * 
+	 * @param e
+	 *            The event to pass.
+	 */
+	public static void queueEvent (Event e)
 	{
 		eventQueue.add (e);
 	}
 
-	public void processEvents ()
+	/**
+	 * Sends all events in queue to the appropriate listeners.
+	 */
+	public static void processEvents ()
 	{
 		Event e = eventQueue.poll ();
 		while (e != null)
@@ -70,16 +93,5 @@ public class EventManager implements Disposable
 			}
 			e = eventQueue.poll ();
 		}
-	}
-
-	public static EventManager get ()
-	{
-		return manager;
-	}
-
-	@Override
-	public void dispose ()
-	{
-		manager = null;
 	}
 }
