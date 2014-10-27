@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import edu.fresnostate.turnbased.event.AttackUnitEvent;
 import edu.fresnostate.turnbased.event.CreateUnitEvent;
+import edu.fresnostate.turnbased.event.EndTurnEvent;
 import edu.fresnostate.turnbased.event.Event;
 import edu.fresnostate.turnbased.event.EventListener;
 import edu.fresnostate.turnbased.event.EventManager;
@@ -36,9 +37,18 @@ public class GameLogic implements EventListener
 		case ATTACK_UNIT :
 			handleAttackUnit ((AttackUnitEvent) e);
 			break;
+		case END_TURN : 
+			handleEndTurn ((EndTurnEvent) e);
+			break;
 		default :
 			break;
 		}
+	}
+
+	private void handleEndTurn (EndTurnEvent e)
+	{
+		// TODO Auto-generated method stub
+		
 	}
 
 	private void handleAttackUnit (AttackUnitEvent e)
