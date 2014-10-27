@@ -2,6 +2,7 @@ package edu.fresnostate.turnbased;
 
 import java.util.List;
 import com.badlogic.gdx.maps.MapLayer;
+import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
@@ -38,6 +39,18 @@ public class LogicMap
 						tiles [x] [y] = new Tile (tile.getProperties ());
 					}
 				}
+			}
+		}
+	}
+
+	public LogicMap (MapProperties [ ][ ] mapData)
+	{
+		tiles = new Tile [mapData.length] [mapData [0].length];
+		for (int x = 0; x < mapData.length; ++ x)
+		{
+			for (int y = 0; y < mapData [x].length; ++ y)
+			{
+				tiles [x] [y] = new Tile (mapData [x] [y]);
 			}
 		}
 	}

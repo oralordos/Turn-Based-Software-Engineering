@@ -2,6 +2,7 @@ package edu.fresnostate.turnbased.pathfinding;
 
 import java.util.ArrayList;
 import java.util.List;
+import edu.fresnostate.turnbased.Coordinates;
 import edu.fresnostate.turnbased.LogicMap;
 import edu.fresnostate.turnbased.MovementType;
 import edu.fresnostate.turnbased.Tile;
@@ -45,27 +46,28 @@ public class TilemapGraph implements Graph
 		int y = getLocalizedY (node);
 		List <Connection> connections = new ArrayList <Connection> (4);
 
-		int [ ] xs = {x - 1, x + 1};
-		int [ ] ys = {y - 1, y + 1};
+		Coordinates [ ] coords =
+				{new Coordinates (x - 1, y), new Coordinates (x + 1, y),
+						new Coordinates (x, y - 1), new Coordinates (x, y + 1)};
 
-		for (int currX : xs)
+		for (Coordinates currCoord : coords)
 		{
-			if (currX >= 0 && currX < map.getWidth ())
+			int currX = currCoord.x;
+			int currY = currCoord.y;
+			if (currX >= 0 && currX < map.getWidth () && currY >= 0
+					&& currY < map.getHeight ())
 			{
-				for (int currY : ys)
+				Tile tile = map.getTile (currX, currY);
+				int movementCost = tile.getmovementcost (currentMovement);
+				if (movementCost > 0)
 				{
-					if (currY >= 0 && currY < map.getHeight ())
-					{
-						Tile tile = map.getTile (currX, currY);
-						Connection conn =
-								new Connection (
-										tile.getmovementcost (currentMovement),
-										node, generalize (currX, currY));
-						connections.add (conn);
-					}
+					Connection conn =
+							new Connection (movementCost, node, generalize (
+									currX, currY));
+					connections.add (conn);
 				}
 			}
 		}
-		return (Connection [ ]) connections.toArray ();
+		return connections.toArray (new Connection [0]);
 	}
 }

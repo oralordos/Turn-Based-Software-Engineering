@@ -1,9 +1,9 @@
 package edu.fresnostate.turnbased.pathfinding;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
@@ -35,7 +35,7 @@ public abstract class DijkstraMap
 		NodeRecord startRecord = new NodeRecord (start, null, 0);
 
 		Queue <NodeRecord> open = new PriorityQueue <NodeRecord> (16, comp);
-		Queue <NodeRecord> closed = new LinkedList <NodeRecord> ();
+		List <NodeRecord> closed = new ArrayList <NodeRecord> ();
 
 		open.add (startRecord);
 
@@ -65,12 +65,14 @@ public abstract class DijkstraMap
 								new NodeRecord (endNode, connection,
 										endNodeCost);
 					}
-					else if (endNodeRecord.costSoFar > endNodeCost)
-					{
-						open.remove (endNodeRecord);
-						endNodeRecord.connection = connection;
-						endNodeRecord.costSoFar = endNodeCost;
-					}
+					/*
+					 * else if (endNodeRecord.costSoFar > endNodeCost)
+					 * {
+					 * open.remove (endNodeRecord);
+					 * endNodeRecord.connection = connection;
+					 * endNodeRecord.costSoFar = endNodeCost;
+					 * }
+					 */
 					else
 					{
 						continue;
@@ -79,6 +81,7 @@ public abstract class DijkstraMap
 					open.add (endNodeRecord);
 				}
 			}
+			closed.add (current);
 		}
 
 		List <List <Integer>> paths = new ArrayList <List <Integer>> ();
@@ -90,7 +93,7 @@ public abstract class DijkstraMap
 			while (currentNode != start)
 			{
 				path.add (currentNode);
-				currentNode = currentRecord.node;
+				currentNode = currentRecord.connection.fromNode;
 				currentRecord = findNode (closed, currentNode);
 			}
 			Collections.reverse (path);
@@ -100,8 +103,8 @@ public abstract class DijkstraMap
 		return paths;
 	}
 
-	private static NodeRecord findNode (final Queue <NodeRecord> list,
-			final int node)
+	private static <T extends Collection <NodeRecord>> NodeRecord findNode (
+			final T list, final int node)
 	{
 		for (NodeRecord record : list)
 		{

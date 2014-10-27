@@ -2,31 +2,36 @@ package edu.fresnostate.turnbased.pathfinding;
 
 import java.util.ArrayList;
 import java.util.List;
+import edu.fresnostate.turnbased.Coordinates;
 
 
 public class PathfindingMap
 {
 	private List <List <List <Coordinates>>>	paths;
 
-	public PathfindingMap (List <List <Integer>> paths, TilemapGraph graph,
+	public PathfindingMap (List <List <Integer>> pathData, TilemapGraph graph,
 			int width, int height)
 	{
-		this.paths = new ArrayList <List <List <Coordinates>>> ();
+		paths = new ArrayList <List <List <Coordinates>>> ();
 		for (int x = 0; x < width; ++ x)
 		{
-			this.paths.add (new ArrayList <List <Coordinates>> ());
+			paths.add (new ArrayList <List <Coordinates>> ());
 			for (int y = 0; y < height; ++ y)
 			{
-				this.paths.get (x).add (null);
+				paths.get (x).add (null);
 			}
 		}
 
-		for (List <Integer> path : paths)
+		for (List <Integer> path : pathData)
 		{
-			int pathTo = path.get (path.size () - 1);
-			int pathToX = graph.getLocalizedX (pathTo);
-			int pathToY = graph.getLocalizedY (pathTo);
-			this.paths.get (pathToX).set (pathToY, localizePath (graph, path));
+			if ( ! path.isEmpty ())
+			{
+				int pathTo = path.get (path.size () - 1);
+				int pathToX = graph.getLocalizedX (pathTo);
+				int pathToY = graph.getLocalizedY (pathTo);
+				List <Coordinates> localizedPath = localizePath (graph, path);
+				paths.get (pathToX).set (pathToY, localizedPath);
+			}
 		}
 	}
 
@@ -41,20 +46,14 @@ public class PathfindingMap
 	}
 
 	private static List <Coordinates> localizePath (TilemapGraph graph,
-			List <Integer> path)
+			List <Integer> pathData)
 	{
-		return null;
-	}
-
-	public class Coordinates
-	{
-		public int	x;
-		public int	y;
-
-		public Coordinates (int x, int y)
+		List <Coordinates> path = new ArrayList <Coordinates> ();
+		for (Integer node : pathData)
 		{
-			this.x = x;
-			this.y = y;
+			path.add (new Coordinates (graph.getLocalizedX (node), graph
+					.getLocalizedY (node)));
 		}
+		return path;
 	}
 }
