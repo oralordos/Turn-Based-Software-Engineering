@@ -46,11 +46,13 @@ public class TilemapGraph implements Graph
 		int y = getLocalizedY (node);
 		List <Connection> connections = new ArrayList <Connection> (4);
 
-		Coordinates [ ] coords =
-				{new Coordinates (x - 1, y), new Coordinates (x + 1, y),
-						new Coordinates (x, y - 1), new Coordinates (x, y + 1)};
+		List<Coordinates<Integer>> coords = new ArrayList <Coordinates<Integer>> (4);
+		coords.add(new Coordinates<Integer> (x - 1, y));
+		coords.add (new Coordinates<Integer> (x + 1, y));
+		coords.add(new Coordinates<Integer> (x, y - 1));
+		coords.add (new Coordinates<Integer> (x, y + 1));
 
-		for (Coordinates currCoord : coords)
+		for (Coordinates<Integer> currCoord : coords)
 		{
 			int currX = currCoord.x;
 			int currY = currCoord.y;
