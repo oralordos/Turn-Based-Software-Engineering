@@ -12,11 +12,12 @@ import edu.fresnostate.turnbased.event.EventListener;
 import edu.fresnostate.turnbased.event.EventManager;
 import edu.fresnostate.turnbased.event.EventType;
 import edu.fresnostate.turnbased.event.UnitAttackedEvent;
+import edu.fresnostate.turnbased.event.UnitCreatedEvent;
 
 
 public class GameLogic implements EventListener
 {
-	private List <Player> playerList;
+	private List <Player>		playerList;
 	private Map <Integer, Unit>	units;
 
 	public GameLogic ()
@@ -37,7 +38,7 @@ public class GameLogic implements EventListener
 		case ATTACK_UNIT :
 			handleAttackUnit ((AttackUnitEvent) e);
 			break;
-		case END_TURN : 
+		case END_TURN :
 			handleEndTurn ((EndTurnEvent) e);
 			break;
 		default :
@@ -47,8 +48,8 @@ public class GameLogic implements EventListener
 
 	private void handleEndTurn (EndTurnEvent e)
 	{
-		// TODO Auto-generated method stub
-		
+		// TODO Finish EndTurn
+		//EventManager.queueEvent (new EndTurnEvent (e));
 	}
 
 	private void handleAttackUnit (AttackUnitEvent e)
@@ -57,10 +58,21 @@ public class GameLogic implements EventListener
 		Unit attacker = getUnit (e.attackerID);
 		if (attacker.isInRange (e.targetID))
 		{
-
 			attacker.attack (e.targetID);
-			EventManager.queueEvent (
-					new UnitAttackedEvent (e.attackerID, e.targetID));
+			EventManager.queueEvent (new UnitAttackedEvent (e.attackerID,
+					e.targetID));
+		}
+	}
+
+	private void handleCreateUnit (CreateUnitEvent e)
+	{
+		// TODO Make sure player is current player and make sure player has enough cost.
+		Player.resources.get(ResourceType) 
+		if()
+		{
+			Player PlayerResorce = 
+		
+			EventManager.queueEvent (new UnitCreatedEvent (unit.unitID));
 		}
 	}
 
@@ -68,12 +80,18 @@ public class GameLogic implements EventListener
 	{
 		return units.get (unitID);
 	}
-
-	private void handleCreateUnit (CreateUnitEvent e)
+	
+	private Player getPathMap()
 	{
-		// TODO Auto-generated method stub
+		// TODO 
 	}
-
+	
+	private Player getPlayer(List <Player> )
+	{
+		return Player;
+	}
+	
+	
 	public List <Player> getPlayerList ()
 	{
 		return playerList;
