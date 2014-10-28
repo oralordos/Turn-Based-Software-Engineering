@@ -1,11 +1,11 @@
 package edu.fresnostate.turnbased;
 
-public class Coordinates
+public class Coordinates <T>
 {
-	public final int	x;
-	public final int	y;
+	public final T	x;
+	public final T	y;
 
-	public Coordinates (int x, int y)
+	public Coordinates (T x, T y)
 	{
 		this.x = x;
 		this.y = y;
