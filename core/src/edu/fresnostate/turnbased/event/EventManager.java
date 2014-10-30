@@ -6,6 +6,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
+import edu.fresnostate.turnbased.Player;
+import edu.fresnostate.turnbased.Tile;
+import edu.fresnostate.turnbased.Unit;
+import edu.fresnostate.turnbased.pathfinding.PathfindingMap;
 
 
 /**
@@ -17,11 +21,13 @@ import java.util.Queue;
  */
 public abstract class EventManager
 {
-	private static Map <EventType, List <EventListener>>	listeners	=
-																				new EnumMap <EventType, List <EventListener>> (
-																						EventType.class);
-	private static Queue <Event>							eventQueue	=
-																				new LinkedList <Event> ();
+	private static Map <EventType, List <EventListener>>	listeners			=
+																						new EnumMap <EventType, List <EventListener>> (
+																								EventType.class);
+	private static Queue <Event>							eventQueue			=
+																						new LinkedList <Event> ();
+	private static InformationProvider						informationProvider	=
+																						null;
 
 	/**
 	 * Registers a listener for a specific event.
@@ -93,5 +99,40 @@ public abstract class EventManager
 			}
 			e = eventQueue.poll ();
 		}
+	}
+
+	public static Unit getUnit (int unitID)
+	{
+		return informationProvider.getUnit (unitID);
+	}
+
+	public static int getNumberPlayers ()
+	{
+		return informationProvider.getNumberPlayers ();
+	}
+
+	public static PathfindingMap getPathMap (int unitID)
+	{
+		return informationProvider.getPathMap (unitID);
+	}
+
+	public static Player getPlayer (int playerNum)
+	{
+		return informationProvider.getPlayer (playerNum);
+	}
+
+	public static int getMapWidth ()
+	{
+		return informationProvider.getMapWidth ();
+	}
+
+	public static int getMapHeight ()
+	{
+		return informationProvider.getMapHeight ();
+	}
+
+	public static Tile getMapTile (int x, int y)
+	{
+		return informationProvider.getMapTile (x, y);
 	}
 }
