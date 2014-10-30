@@ -10,8 +10,8 @@ public interface InformationProvider
 	public PathfindingMap getPathMap(int unitID);
 	public Unit getUnit(int unitID);
 	public Player getPlayer(int playerNum);
-	public int getNumberOfPlayers();
+	public int getNumberPlayers();
 	public int getMapWidth();
 	public int getMapHeight();
-	public Tile getTile(int x, int y);
+	public Tile getMapTile(int x, int y);
 }
