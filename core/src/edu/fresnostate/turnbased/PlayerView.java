@@ -161,16 +161,13 @@ public class PlayerView implements View, Disposable, GestureListener
 		cam.resize (30f, 30f * height / width);
 	}
 
-	public void render (TiledMap map, int tileSize,
-			OrthogonalTiledMapRenderer renderer, OrthographicCamera cam,
-			InputMultiplexer multiplexer, InputProcessor adapter,
-			GestureListener listener)
+	public void render ()
 	{
 		// TODO draw units
 		// TODO draw GUI
 		Gdx.gl.glClear (GL20.GL_COLOR_BUFFER_BIT);
 		cam.update ();
-		renderer.setView (cam);
+		cam.applyRenderer(renderer);
 		renderer.render ();
 	}
 

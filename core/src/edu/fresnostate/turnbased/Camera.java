@@ -1,6 +1,7 @@
 package edu.fresnostate.turnbased;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 
@@ -58,5 +59,10 @@ public class Camera
 	{
 		Vector3 vector = cam.project (new Vector3 (x, y, 0));
 		return new Coordinates <Float> (vector.x, vector.y);
+	}
+
+	public void applyRenderer (OrthogonalTiledMapRenderer renderer)
+	{
+		renderer.setView (cam);
 	}
 }
