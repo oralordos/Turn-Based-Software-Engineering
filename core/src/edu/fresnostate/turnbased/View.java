@@ -1,8 +1,6 @@
 package edu.fresnostate.turnbased;
 
-public class View
+public interface View
 {
-	public void update () {
-		
-	}
+	public void update ();
 }
