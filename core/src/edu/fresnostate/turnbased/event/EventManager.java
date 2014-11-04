@@ -101,6 +101,12 @@ public abstract class EventManager
 		}
 	}
 
+	public static void
+			registerInformationProvider (InformationProvider provider)
+	{
+		informationProvider = provider;
+	}
+
 	public static Unit getUnit (int unitID)
 	{
 		return informationProvider.getUnit (unitID);
