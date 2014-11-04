@@ -32,6 +32,17 @@ public class Camera
 
 	public void moveTo (float x, float y)
 	{
+		// TODO Save coordinates to move towards and calculate speed to move camera at.
+		//if
+		cam.position.x += x;
+		cam.position.y += y;
+		cam.update ();
+	}
+	
+	public void update()
+	{
+		// TODO Move camera towards saved coordinates at the pre-calculated speed.
+		// TODO Clear coordinates when camera arrives.
 	}
 
 	public void handleZoom ()
