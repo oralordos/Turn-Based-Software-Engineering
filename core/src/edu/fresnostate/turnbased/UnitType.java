@@ -1,28 +1,29 @@
 package edu.fresnostate.turnbased;
 
-public class UnitType {
+public enum UnitType {
+	INFANTRY(10, 2, 3, 4, 1, 200,MovementType.WALK), TANK(10, 4, 4, 4, 1, 1000,MovementType.TREAD), MONSTER(10, 3,
+			4, 5, 2, 1200,MovementType.FLY);
 
-	public enum Unitstates {
-		INFANTRY(10, 2, 3, 4,1,200), TANK(10, 4, 4, 4,1,1000), MONSTER(10, 3, 4, 5,2,1200);
+	final int UnitBaseHP;
 
-		final int UnitBaseHP;
-
-		final int UnitAD;
-		final int UnitMovement;
-		final int UnitDF;
-		final int UnitRang ;
-		final int Unitcost;
-
-		Unitstates(int UnitBaseHP, int UnitDF, int UnitAD, int UnitMovement,int UnitRang,int Unitcost) {
-			this.UnitBaseHP = UnitBaseHP;
-			this.UnitDF = UnitDF;
-			this.UnitAD = UnitAD;
-			this.UnitMovement = UnitMovement;
-			this.UnitRang=UnitRang;
-			this.Unitcost=Unitcost;
-		}
-
+	final int UnitAD;
+	final int UnitMovement;
+	final int UnitDF;
+	final int UnitRang;
+	final int Unitcost;
+	final MovementType movement;
+	
+	UnitType(int UnitBaseHP, int UnitDF, int UnitAD, int UnitMovement,
+			int UnitRang, int Unitcost,MovementType movement) {
+		this.UnitBaseHP = UnitBaseHP;
+		this.UnitDF = UnitDF;
+		this.UnitAD = UnitAD;
+		this.UnitMovement = UnitMovement;
+		this.UnitRang = UnitRang;
+		this.Unitcost = Unitcost;
+		this.movement= movement;
 	}
+
 }
 
 // switch (UnitID)
