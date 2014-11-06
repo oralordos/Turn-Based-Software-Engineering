@@ -9,10 +9,17 @@ import com.badlogic.gdx.math.Vector3;
 public class Camera
 {
 	private OrthographicCamera	cam;
+	private float				goalX;
+	private float				goalY;
+	private float				speedX;
+	private float				speedY;
+	private final static int	FRAMES	= 30;
 
 	public Camera (float w, float h)
 	{
 		cam = new OrthographicCamera (w, h);
+		goalX = - 1;
+		goalY = - 1;
 	}
 
 	public void zoom (float z)
@@ -33,19 +40,23 @@ public class Camera
 
 	public void moveTo (float x, float y)
 	{
-		// TODO Save coordinates to move towards and calculate speed to move camera at.
-		//float tempX;
-		//float tempY;
-		//if (vector.x != x && vector.y != y)
-		cam.position.x += 1;
-		cam.position.y += 1;
-		//cam.update (tempX, tempY);
+		goalX = x;
+		goalY = y;
+		speedX = (cam.position.x - x) / FRAMES;
+		speedY = (cam.position.y - y) / FRAMES;
 	}
-	
-	public void update()
+
+	public void update ()
 	{
-		// TODO Move camera towards saved coordinates at the pre-calculated speed.
-		// TODO Clear coordinates when camera arrives.
+		if (goalX >= 0 && goalY >= 0)
+		{
+			move (speedX, speedY);
+			if (cam.position.x > goalX - 0.01 && cam.position.x < goalX + 0.01 && cam.position.y > goalY - 0.01 && cam.position.y < goalY + 0.01)
+			{
+				goalX = - 1;
+				goalY = - 1;
+			}
+		}
 		cam.update ();
 	}
 
