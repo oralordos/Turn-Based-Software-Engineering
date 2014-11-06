@@ -1,6 +1,7 @@
 package edu.fresnostate.turnbased;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 
@@ -33,16 +34,19 @@ public class Camera
 	public void moveTo (float x, float y)
 	{
 		// TODO Save coordinates to move towards and calculate speed to move camera at.
-		//if
-		cam.position.x += x;
-		cam.position.y += y;
-		cam.update ();
+		//float tempX;
+		//float tempY;
+		//if (vector.x != x && vector.y != y)
+		cam.position.x += 1;
+		cam.position.y += 1;
+		//cam.update (tempX, tempY);
 	}
 	
 	public void update()
 	{
 		// TODO Move camera towards saved coordinates at the pre-calculated speed.
 		// TODO Clear coordinates when camera arrives.
+		cam.update ();
 	}
 
 	public void handleZoom ()
@@ -69,5 +73,10 @@ public class Camera
 	{
 		Vector3 vector = cam.project (new Vector3 (x, y, 0));
 		return new Coordinates <Float> (vector.x, vector.y);
+	}
+
+	public void applyRenderer (OrthogonalTiledMapRenderer renderer)
+	{
+		renderer.setView (cam);
 	}
 }

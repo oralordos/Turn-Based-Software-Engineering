@@ -4,10 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.assets.loaders.resolvers.ExternalFileHandleResolver;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.input.GestureDetector.GestureListener;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -161,16 +159,13 @@ public class PlayerView implements View, Disposable, GestureListener
 		cam.resize (30f, 30f * height / width);
 	}
 
-	public void render (TiledMap map, int tileSize,
-			OrthogonalTiledMapRenderer renderer, OrthographicCamera cam,
-			InputMultiplexer multiplexer, InputProcessor adapter,
-			GestureListener listener)
+	public void render ()
 	{
 		// TODO draw units
 		// TODO draw GUI
 		Gdx.gl.glClear (GL20.GL_COLOR_BUFFER_BIT);
 		cam.update ();
-		renderer.setView (cam);
+		cam.applyRenderer(renderer);
 		renderer.render ();
 	}
 
