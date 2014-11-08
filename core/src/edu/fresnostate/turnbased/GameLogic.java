@@ -14,6 +14,7 @@ import edu.fresnostate.turnbased.event.EventListener;
 import edu.fresnostate.turnbased.event.EventManager;
 import edu.fresnostate.turnbased.event.EventType;
 import edu.fresnostate.turnbased.event.InformationProvider;
+import edu.fresnostate.turnbased.event.MoveUnitEvent;
 import edu.fresnostate.turnbased.event.UnitAttackedEvent;
 import edu.fresnostate.turnbased.event.UnitCreatedEvent;
 import edu.fresnostate.turnbased.pathfinding.PathfindingMap;
@@ -30,7 +31,11 @@ public class GameLogic implements EventListener, InformationProvider
 	{
 		setPlayerList (new ArrayList <Player> ());
 		units = new HashMap <Integer, Unit> ();
+		EventManager.registerInformationProvider (this);
 		EventManager.addListener (this, EventType.CREATE_UNIT);
+		EventManager.addListener (this, EventType.ATTACK_UNIT);
+		EventManager.addListener (this, EventType.MOVE_UNIT);
+		EventManager.addListener (this, EventType.END_TURN);
 	}
 
 	@Override
@@ -44,12 +49,21 @@ public class GameLogic implements EventListener, InformationProvider
 		case ATTACK_UNIT :
 			handleAttackUnit ((AttackUnitEvent) e);
 			break;
+		case MOVE_UNIT :
+			handleMoveUnit((MoveUnitEvent) e);
+			break;
 		case END_TURN :
 			handleEndTurn ((EndTurnEvent) e);
 			break;
 		default :
 			break;
 		}
+	}
+
+	private void handleMoveUnit (MoveUnitEvent e)
+	{
+		// TODO Move the Unit selected
+		
 	}
 
 	private void handleEndTurn (EndTurnEvent e)
@@ -83,7 +97,7 @@ public class GameLogic implements EventListener, InformationProvider
 		Player player = getPlayer (Currentplayer);
 		int playerMoney = player.resources.get (ResourceType.MONEY);
 		int playerFood = player.resources.get (ResourceType.FOOD);
-		int moneyCost = e.unitType.costs.get (ResourceType.MONEY);
+		int moneyCost = e.unitType.Unitcost.get (ResourceType.MONEY);
 		int foodCost = e.unitType.costs.get (ResourceType.FOOD);
 		if (moneyCost <= playerMoney && foodCost <= playerFood)
 		{
