@@ -17,6 +17,7 @@ public class Tile
 	private int							resourceRadius;
 	private Map <ResourceType, Integer>	income;
 	private Map <MovementType, Integer>	Costs;
+	public int							unitOnID;
 
 	public Tile (MapProperties p)
 	{
@@ -27,6 +28,7 @@ public class Tile
 		capturePoints = p.get ("capturePoints", Integer.class);
 		unitRegen = p.get ("unitRegen", Integer.class);
 		resourceRadius = p.get ("resourceRadius", Integer.class);
+		unitOnID = - 1;
 
 		income = new EnumMap <ResourceType, Integer> (ResourceType.class);
 		income.put (ResourceType.FOOD, p.get ("incomeFood", Integer.class));
