@@ -13,6 +13,8 @@ public enum UnitType {
 	final int Unitcost;
 	final MovementType movement;
 	
+	private static int nextID = 0;
+	
 	UnitType(int UnitBaseHP, int UnitDF, int UnitAD, int UnitMovement,
 			int UnitRang, int Unitcost,MovementType movement) {
 		this.UnitBaseHP = UnitBaseHP;
@@ -22,6 +24,11 @@ public enum UnitType {
 		this.UnitRang = UnitRang;
 		this.Unitcost = Unitcost;
 		this.movement= movement;
+	}
+	
+	public Unit create(int player)
+	{
+		return new Unit (this, player, nextID++);
 	}
 
 }
