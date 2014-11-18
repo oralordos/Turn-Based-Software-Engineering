@@ -1,5 +1,8 @@
 package edu.fresnostate.turnbased;
 
+import java.util.Map;
+
+
 public enum UnitType {
 	INFANTRY(10, 2, 3, 4, 1, 200,MovementType.WALK), TANK(10, 4, 4, 4, 1, 1000,MovementType.TREAD), MONSTER(10, 3,
 			4, 5, 2, 1200,MovementType.FLY);
@@ -10,7 +13,7 @@ public enum UnitType {
 	final int UnitMovement;
 	final int UnitDF;
 	final int UnitRang;
-	final int Unitcost;
+	final Map<ResourceType, Integer> Unitcost;
 	final MovementType movement;
 	
 	UnitType(int UnitBaseHP, int UnitDF, int UnitAD, int UnitMovement,
