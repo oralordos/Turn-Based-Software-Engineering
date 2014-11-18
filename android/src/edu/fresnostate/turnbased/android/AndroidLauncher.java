@@ -11,6 +11,17 @@ public class AndroidLauncher extends AndroidApplication {
 	protected void onCreate (Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
+		config.r = 5;
+		config.g = 6;
+		config.b = 5;
+		config.a = 0;
+		config.depth = 0;
+		config.getTouchEventsForLiveWallpaper = false;
+		config.hideStatusBar = true;
+		config.stencil = 0;
+		config.useAccelerometer = false;
+		config.useCompass = false;
+		config.useWakelock = true;
 		initialize(new Game(), config);
 	}
 }

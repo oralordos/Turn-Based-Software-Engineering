@@ -5,30 +5,42 @@ import com.badlogic.gdx.ApplicationAdapter;
 
 public class Game extends ApplicationAdapter
 {
-	private PlayerView	view;
+	private GameState	currentState;
 
 	@Override
 	public void create ()
 	{
-		view = new PlayerView ();
+		currentState = null;
+		setState (new InGameState ());
 	}
 
 	@Override
 	public void render ()
 	{
-		view.update ();
-		view.render ();
+		currentState.update ();
+		currentState.render ();
 	}
 
 	@Override
 	public void resize (int width, int height)
 	{
-		view.resize (width, height);
+		currentState.resize (width, height);
 	}
 
 	@Override
 	public void dispose ()
 	{
-		view.dispose ();
+		currentState.exit ();
+		currentState = null;
+	}
+
+	public void setState (GameState newState)
+	{
+		if (currentState != null)
+		{
+			currentState.exit ();
+		}
+		currentState = newState;
+		newState.enter ();
 	}
 }

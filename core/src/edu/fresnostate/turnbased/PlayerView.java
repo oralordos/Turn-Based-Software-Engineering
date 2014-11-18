@@ -180,5 +180,6 @@ public class PlayerView implements View, Disposable, GestureListener
 	public void update ()
 	{
 		// TODO Loop through graphical units and call their update functions.
+		handleInput ();
 	}
 }

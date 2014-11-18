@@ -1,3 +1,4 @@
+
 package edu.fresnostate.turnbased;
 
 import java.util.List;
@@ -8,6 +9,14 @@ public class Unit
 	int UnitcurentHP;
 	int UnitId;
 	int BilldingCurentHP;
+	
+
+	public Unit (UnitType unitType, int player, int id)
+	{
+		// TODO Auto-generated constructor stub
+	}
+	
+	
 	
 	public void Move(List<Coordinates<Integer>> path)
 	{
