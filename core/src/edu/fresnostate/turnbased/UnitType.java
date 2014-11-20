@@ -1,11 +1,12 @@
 package edu.fresnostate.turnbased;
 
+import java.util.EnumMap;
 import java.util.Map;
 
 
 public enum UnitType {
-	INFANTRY(10, 2, 3, 4, 1, 200,MovementType.WALK), TANK(10, 4, 4, 4, 1, 1000,MovementType.TREAD), MONSTER(10, 3,
-			4, 5, 2, 1200,MovementType.FLY);
+	INFANTRY(10, 2, 3, 4, 1,200,200,MovementType.WALK), TANK(10, 4, 4, 4, 1,1000,500 ,MovementType.TREAD), MONSTER(10, 3,
+			4, 5, 2,500,1200 ,MovementType.FLY);
 
 	final int UnitBaseHP;
 
@@ -19,13 +20,15 @@ public enum UnitType {
 	private static int nextID = 0;
 	
 	UnitType(int UnitBaseHP, int UnitDF, int UnitAD, int UnitMovement,
-			int UnitRang, int Unitcost,MovementType movement) {
+			int UnitRang, int UnitMoneycost, int UnitFoodCost, MovementType movement) {
 		this.UnitBaseHP = UnitBaseHP;
 		this.UnitDF = UnitDF;
 		this.UnitAD = UnitAD;
 		this.UnitMovement = UnitMovement;
 		this.UnitRang = UnitRang;
-		this.Unitcost = Unitcost;
+		Unitcost = new EnumMap <ResourceType, Integer> (ResourceType.class);
+		Unitcost.put(ResourceType.MONEY, UnitMoneycost);
+		Unitcost.put(ResourceType.FOOD, UnitMoneycost);
 		this.movement= movement;
 	}
 	
