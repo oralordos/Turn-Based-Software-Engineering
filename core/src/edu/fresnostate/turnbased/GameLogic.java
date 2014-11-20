@@ -17,6 +17,7 @@ import edu.fresnostate.turnbased.event.InformationProvider;
 import edu.fresnostate.turnbased.event.MoveUnitEvent;
 import edu.fresnostate.turnbased.event.UnitAttackedEvent;
 import edu.fresnostate.turnbased.event.UnitCreatedEvent;
+import edu.fresnostate.turnbased.event.UnitMovedEvent;
 import edu.fresnostate.turnbased.pathfinding.PathfindingMap;
 
 
@@ -50,7 +51,7 @@ public class GameLogic implements EventListener, InformationProvider
 			handleAttackUnit ((AttackUnitEvent) e);
 			break;
 		case MOVE_UNIT :
-			handleMoveUnit((MoveUnitEvent) e);
+			handleMoveUnit ((MoveUnitEvent) e);
 			break;
 		case END_TURN :
 			handleEndTurn ((EndTurnEvent) e);
@@ -62,8 +63,12 @@ public class GameLogic implements EventListener, InformationProvider
 
 	private void handleMoveUnit (MoveUnitEvent e)
 	{
-		// TODO Move the Unit selected
-		
+		Unit unit = getUnit (e.unitID);
+		if (unit.player == Currentplayer && unit.CanpathOn (e.path))
+		{
+			unit.Move (e.path);
+			EventManager.queueEvent (new UnitMovedEvent (e.unitID, e.path));
+		}
 	}
 
 	private void handleEndTurn (EndTurnEvent e)
@@ -74,9 +79,9 @@ public class GameLogic implements EventListener, InformationProvider
 
 	private void handleAttackUnit (AttackUnitEvent e)
 	{
-		// TODO Make sure the attacker's player is the current player
+		Unit unit = getUnit (e.targetID);
 		Unit attacker = getUnit (e.attackerID);
-		if (attacker.isInRange (e.targetID))
+		if (unit.player == Currentplayer && attacker.isInRange (e.targetID))
 		{
 			attacker.attack (e.targetID);
 			EventManager.queueEvent (new UnitAttackedEvent (e.attackerID,
@@ -92,20 +97,19 @@ public class GameLogic implements EventListener, InformationProvider
 	 */
 	private void handleCreateUnit (CreateUnitEvent e)
 	{
-		// TODO Make sure player is current player and make sure player has
 		// enough cost and play is owns tile.
 		Player player = getPlayer (Currentplayer);
 		int playerMoney = player.resources.get (ResourceType.MONEY);
 		int playerFood = player.resources.get (ResourceType.FOOD);
 		int moneyCost = e.unitType.Unitcost.get (ResourceType.MONEY);
-		int foodCost = e.unitType.costs.get (ResourceType.FOOD);
+		int foodCost = e.unitType.Unitcost.get (ResourceType.FOOD);
 		if (moneyCost <= playerMoney && foodCost <= playerFood)
 		{
 			player.resources.put (ResourceType.MONEY, playerMoney - moneyCost);
 			player.resources.put (ResourceType.FOOD, playerFood - foodCost);
 			Unit newUnit = e.unitType.create (Currentplayer);
-			units.put (newUnit.unitID, newUnit);
-			EventManager.queueEvent (new UnitCreatedEvent (newUnit.unitID));
+			units.put (newUnit.UnitId, newUnit);
+			EventManager.queueEvent (new UnitCreatedEvent (newUnit.UnitId));
 		}
 	}
 
