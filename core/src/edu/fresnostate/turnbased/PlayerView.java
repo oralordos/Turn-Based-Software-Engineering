@@ -1,22 +1,39 @@
 package edu.fresnostate.turnbased;
 
+import java.util.ArrayList;
+import java.util.List;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.assets.loaders.resolvers.ExternalFileHandleResolver;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.input.GestureDetector.GestureListener;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.SerializationException;
+import edu.fresnostate.turnbased.event.CurrentPlayerChangedEvent;
+import edu.fresnostate.turnbased.event.Event;
+import edu.fresnostate.turnbased.event.EventListener;
+import edu.fresnostate.turnbased.event.EventManager;
+import edu.fresnostate.turnbased.event.EventType;
+import edu.fresnostate.turnbased.event.MoveUnitEvent;
+import edu.fresnostate.turnbased.event.UnitAttackedEvent;
+import edu.fresnostate.turnbased.event.UnitCreatedEvent;
+import edu.fresnostate.turnbased.event.UnitDestroyedEvent;
+import edu.fresnostate.turnbased.event.UnitMovedEvent;
+import edu.fresnostate.turnbased.event.WindowResizedEvent;
+import edu.fresnostate.turnbased.pathfinding.PathfindingMap;
 
 
-public class PlayerView implements View, Disposable, GestureListener
+public class PlayerView implements View, Disposable, GestureListener,
+		EventListener
 {
 	private final static float			MOUSE_WHEEL_ZOOM	= 1.25f;
 	private TiledMap					map;
@@ -26,6 +43,10 @@ public class PlayerView implements View, Disposable, GestureListener
 	private float						lastInitial			= - 1.0f;
 	private float						lastZoom			= - 1.0f;
 	private Camera						cam;
+	private SpriteBatch					batch;
+	private int							currentPlayer;
+	private List <GUnite>				units;
+	private int							selectedUnit;
 	private InputAdapter				adapter				=
 																	new InputAdapter ()
 																	{
@@ -70,7 +91,27 @@ public class PlayerView implements View, Disposable, GestureListener
 	@Override
 	public boolean tap (float x, float y, int count, int button)
 	{
-		return false;
+		Coordinates <Float> gameCoords = cam.toGameCoords (x, y);
+		int gameX = gameCoords.x.intValue ();
+		int gameY = gameCoords.y.intValue ();
+		Tile tile = EventManager.getMapTile (gameX, gameY);
+		if (tile.unitOnID >= 0)
+		{
+			selectedUnit = tile.unitOnID;
+		}
+		else if (selectedUnit >= 0)
+		{
+			PathfindingMap pathMap = EventManager.getPathMap (selectedUnit);
+			if (pathMap.hasPathTo (gameX, gameY))
+				;
+			{
+				MoveUnitEvent event =
+						new MoveUnitEvent (selectedUnit, pathMap.getPathTo (
+								gameX, gameY));
+				EventManager.queueEvent (event);
+			}
+		}
+		return true;
 	}
 
 	@Override
@@ -120,7 +161,15 @@ public class PlayerView implements View, Disposable, GestureListener
 		tileSize =
 				map.getTileSets ().getTile (1).getTextureRegion ()
 						.getRegionWidth ();
-		renderer = new OrthogonalTiledMapRenderer (map, 1.0f / tileSize);
+		TiledMapTileLayer mapLayer =
+				(TiledMapTileLayer) (map.getLayers ().get (0));
+		int mapWidth = mapLayer.getWidth ();
+		int mapHeight = mapLayer.getHeight ();
+		currentPlayer = 0;
+		selectedUnit = - 1;
+		units = new ArrayList <GUnite> ();
+		batch = new SpriteBatch ();
+		renderer = new OrthogonalTiledMapRenderer (map, 1.0f / tileSize, batch);
 		float w = Gdx.graphics.getWidth ();
 		float h = Gdx.graphics.getHeight ();
 		cam = new Camera (w, h);
@@ -130,6 +179,12 @@ public class PlayerView implements View, Disposable, GestureListener
 		multiplexer.addProcessor (adapter);
 		Gdx.input.setInputProcessor (multiplexer);
 		Gdx.gl.glClearColor (0, 0, 0, 1);
+		EventManager.addListener (this, EventType.UNIT_ATTACKED);
+		EventManager.addListener (this, EventType.UNIT_DESTROYED);
+		EventManager.addListener (this, EventType.UNIT_CREATED);
+		EventManager.addListener (this, EventType.CURRENT_PLAYER_CHANGED);
+		EventManager.addListener (this, EventType.WINDOW_RESIZED);
+		EventManager.addListener (this, EventType.UNIT_MOVED);
 	}
 
 	public void handleInput ()
@@ -161,12 +216,17 @@ public class PlayerView implements View, Disposable, GestureListener
 
 	public void render ()
 	{
-		// TODO draw units
-		// TODO draw GUI
 		Gdx.gl.glClear (GL20.GL_COLOR_BUFFER_BIT);
+		batch.begin ();
 		cam.update ();
-		cam.applyRenderer(renderer);
+		cam.applyRenderer (renderer);
 		renderer.render ();
+		for (GUnite unit : units)
+		{
+			unit.render (batch);
+		}
+		// TODO draw GUI
+		batch.end ();
 	}
 
 	@Override
@@ -179,7 +239,87 @@ public class PlayerView implements View, Disposable, GestureListener
 	@Override
 	public void update ()
 	{
-		// TODO Loop through graphical units and call their update functions.
+		for (GUnite unit : units)
+		{
+			// TODO uncomment when update is finished.
+			// unit.update();
+		}
+		cam.update ();
 		handleInput ();
+	}
+
+	@Override
+	public void receiveEvent (Event e)
+	{
+		switch (e.getEventType ())
+		{
+		case UNIT_CREATED :
+			handleUnitCreated ((UnitCreatedEvent) e);
+			break;
+		case UNIT_DESTROYED :
+			handleUnitDestroyed ((UnitDestroyedEvent) e);
+			break;
+		case UNIT_ATTACKED :
+			handleUnitAttacked ((UnitAttackedEvent) e);
+			break;
+		case CURRENT_PLAYER_CHANGED :
+			handleCurrentPlayer ((CurrentPlayerChangedEvent) e);
+			break;
+		case WINDOW_RESIZED :
+			handleWindowResized ((WindowResizedEvent) e);
+			break;
+		case UNIT_MOVED:
+			handleUnitMoved((UnitMovedEvent) e);
+			break;
+		default :
+			break;
+		}
+	}
+
+	private void handleUnitMoved (UnitMovedEvent e)
+	{
+		// TODO Auto-generated method stub
+	}
+
+	private void handleWindowResized (WindowResizedEvent e)
+	{
+		resize (e.width, e.height);
+	}
+
+	private void handleCurrentPlayer (CurrentPlayerChangedEvent e)
+	{
+		currentPlayer = e.newPlayer;
+	}
+
+	private void handleUnitAttacked (UnitAttackedEvent e)
+	{
+		// TODO Run attack animation when done.
+	}
+
+	private void handleUnitDestroyed (UnitDestroyedEvent e)
+	{
+		GUnite deadUnit = getGUnit (e.unitID);
+		units.remove (deadUnit);
+	}
+
+	private GUnite getGUnit (int id)
+	{
+		GUnite targetUnit = null;
+		for (GUnite unit : units)
+		{
+			if (unit.UniteID == id)
+			{
+				targetUnit = unit;
+				break;
+			}
+		}
+		return targetUnit;
+	}
+
+	private void handleUnitCreated (UnitCreatedEvent e)
+	{
+		UnitType unitType = EventManager.getUnit (e.unitID).type;
+		GUnite newUnit = new GUnite (e.unitID, unitType.imageName);
+		units.add (newUnit);
 	}
 }
