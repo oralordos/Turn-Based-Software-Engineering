@@ -217,10 +217,10 @@ public class PlayerView implements View, Disposable, GestureListener,
 	public void render ()
 	{
 		Gdx.gl.glClear (GL20.GL_COLOR_BUFFER_BIT);
-		batch.begin ();
 		cam.update ();
 		cam.applyRenderer (renderer);
 		renderer.render ();
+		batch.begin ();
 		for (GUnite unit : units)
 		{
 			unit.render (batch);
