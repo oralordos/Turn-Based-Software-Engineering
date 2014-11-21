@@ -30,7 +30,7 @@ public class GameLogic implements EventListener, InformationProvider
 
 	public GameLogic ()
 	{
-		setPlayerList (new ArrayList <Player> ());
+		playerList = new ArrayList <Player> ();
 		units = new HashMap <Integer, Unit> ();
 		EventManager.registerInformationProvider (this);
 		EventManager.addListener (this, EventType.CREATE_UNIT);
@@ -131,16 +131,6 @@ public class GameLogic implements EventListener, InformationProvider
 	public Player getPlayer (int playerNum)
 	{
 		return playerList.get (playerNum);
-	}
-
-	public List <Player> getPlayerList ()
-	{
-		return playerList;
-	}
-
-	private void setPlayerList (List <Player> playerList)
-	{
-		this.playerList = playerList;
 	}
 
 	@Override
