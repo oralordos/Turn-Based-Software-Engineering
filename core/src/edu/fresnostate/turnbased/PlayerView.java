@@ -172,7 +172,7 @@ public class PlayerView implements View, Disposable, GestureListener,
 		renderer = new OrthogonalTiledMapRenderer (map, 1.0f / tileSize, batch);
 		float w = Gdx.graphics.getWidth ();
 		float h = Gdx.graphics.getHeight ();
-		cam = new Camera (w, h);
+		cam = new Camera (30.0f, 30.0f * h / w, tileSize);
 		cam.zoom (2.0f);
 		multiplexer = new InputMultiplexer ();
 		multiplexer.addProcessor (new GestureDetector (this));
@@ -268,8 +268,8 @@ public class PlayerView implements View, Disposable, GestureListener,
 		case WINDOW_RESIZED :
 			handleWindowResized ((WindowResizedEvent) e);
 			break;
-		case UNIT_MOVED:
-			handleUnitMoved((UnitMovedEvent) e);
+		case UNIT_MOVED :
+			handleUnitMoved ((UnitMovedEvent) e);
 			break;
 		default :
 			break;

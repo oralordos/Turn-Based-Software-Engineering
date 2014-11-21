@@ -13,13 +13,15 @@ public class Camera
 	private float				goalY;
 	private float				speedX;
 	private float				speedY;
+	private int					tileSize;
 	private final static int	FRAMES	= 30;
 
-	public Camera (float w, float h)
+	public Camera (float w, float h, int tileSize)
 	{
 		cam = new OrthographicCamera (w, h);
 		goalX = - 1;
 		goalY = - 1;
+		this.tileSize = tileSize;
 	}
 
 	public void zoom (float z)
@@ -51,7 +53,9 @@ public class Camera
 		if (goalX >= 0 && goalY >= 0)
 		{
 			move (speedX, speedY);
-			if (cam.position.x > goalX - 0.01 && cam.position.x < goalX + 0.01 && cam.position.y > goalY - 0.01 && cam.position.y < goalY + 0.01)
+			if (cam.position.x > goalX - 0.01 && cam.position.x < goalX + 0.01
+					&& cam.position.y > goalY - 0.01
+					&& cam.position.y < goalY + 0.01)
 			{
 				goalX = - 1;
 				goalY = - 1;
@@ -75,15 +79,18 @@ public class Camera
 
 	public Coordinates <Float> toGameCoords (float screenX, float screenY)
 	{
-		Vector3 vector = new Vector3 ();
-		cam.getPickRay (screenX, screenY).getEndPoint (vector, 0);
-		return new Coordinates <Float> (vector.x, vector.y);
+		Vector3 vector = cam.position;
+		vector.scl (1.0f / cam.zoom);
+		return new Coordinates <Float> ( (screenX - vector.x) / tileSize,
+				(screenY - vector.z) / tileSize);
 	}
 
 	public Coordinates <Float> fromGameCoords (float x, float y)
 	{
-		Vector3 vector = cam.project (new Vector3 (x, y, 0));
-		return new Coordinates <Float> (vector.x, vector.y);
+		Vector3 vector = cam.position;
+		vector.scl (1.0f / cam.zoom);
+		return new Coordinates <Float> (x * tileSize + vector.x, y * tileSize
+				+ vector.z);
 	}
 
 	public void applyRenderer (OrthogonalTiledMapRenderer renderer)
