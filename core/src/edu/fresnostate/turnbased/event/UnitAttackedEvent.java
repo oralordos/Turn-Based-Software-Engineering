@@ -2,7 +2,7 @@ package edu.fresnostate.turnbased.event;
 
 /**
  * This event is sent whenever a unit attacks another unit.
- * 
+ *
  * @author Daniel
  *
  */

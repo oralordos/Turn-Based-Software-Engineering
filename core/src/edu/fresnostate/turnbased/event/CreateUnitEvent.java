@@ -6,7 +6,7 @@ import edu.fresnostate.turnbased.UnitType;
 /**
  * This event is send as a request to create a unit for the active player at the
  * specified coordinates.
- * 
+ *
  * @author Daniel
  *
  */

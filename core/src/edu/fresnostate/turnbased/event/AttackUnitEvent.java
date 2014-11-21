@@ -2,7 +2,7 @@ package edu.fresnostate.turnbased.event;
 
 /**
  * This event is sent as a request to have a unit attack another unit.
- * 
+ *
  * @author Daniel
  */
 public class AttackUnitEvent implements Event

@@ -6,8 +6,8 @@ import edu.fresnostate.turnbased.Coordinates;
 
 public class UnitMovedEvent implements Event
 {
-	public final int							unitID;
 	public final List <Coordinates <Integer>>	path;
+	public final int							unitID;
 
 	public UnitMovedEvent (int unitID, List <Coordinates <Integer>> path)
 	{
