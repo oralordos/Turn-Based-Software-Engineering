@@ -3,7 +3,7 @@ package edu.fresnostate.turnbased.event;
 /**
  * A generic inteface that all events implement. Mostly used to cast to the
  * specific sub-type of event.
- * 
+ *
  * @author Daniel
  *
  */

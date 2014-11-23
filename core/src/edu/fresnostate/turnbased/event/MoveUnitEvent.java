@@ -6,20 +6,20 @@ import edu.fresnostate.turnbased.Coordinates;
 
 /**
  * Event sent when a player wants a unit to move.
- * 
+ *
  * @author Daniel
  *
  */
 public class MoveUnitEvent implements Event
 {
 	/**
-	 * The ID of the unit to move.
-	 */
-	public final int							unitID;
-	/**
 	 * The path of coordinates to follow.
 	 */
 	public final List <Coordinates <Integer>>	path;
+	/**
+	 * The ID of the unit to move.
+	 */
+	public final int							unitID;
 
 	/**
 	 * @param unitID

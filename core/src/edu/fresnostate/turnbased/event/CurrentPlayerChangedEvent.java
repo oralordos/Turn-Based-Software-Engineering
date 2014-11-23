@@ -2,7 +2,7 @@ package edu.fresnostate.turnbased.event;
 
 /**
  * This event is sent whenever the current player has changed.
- * 
+ *
  * @author Daniel
  *
  */
