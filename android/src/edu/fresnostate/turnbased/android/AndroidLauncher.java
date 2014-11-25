@@ -21,7 +21,7 @@ public class AndroidLauncher extends AndroidApplication {
 		config.stencil = 0;
 		config.useAccelerometer = false;
 		config.useCompass = false;
-		config.useWakelock = true;
+		config.useWakelock = false;
 		initialize(new Game(), config);
 	}
 }
