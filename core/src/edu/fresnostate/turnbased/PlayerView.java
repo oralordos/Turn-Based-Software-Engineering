@@ -278,7 +278,8 @@ public class PlayerView implements View, Disposable, GestureListener,
 
 	private void handleUnitMoved (UnitMovedEvent e)
 	{
-		// TODO Auto-generated method stub
+		GUnite unit = getGUnit (e.unitID);
+		unit.move (e.path);
 	}
 
 	private void handleWindowResized (WindowResizedEvent e)
