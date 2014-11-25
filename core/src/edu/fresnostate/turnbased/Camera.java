@@ -14,13 +14,16 @@ public class Camera
 	private float				speedX;
 	private float				speedY;
 	private int					tileSize;
+	private int							mapW, mapH;
 	private final static int	FRAMES	= 30;
 
-	public Camera (float w, float h, int tileSize)
+	public Camera (float w, float h, int tileSize, int mapWidth, int mapHeight)
 	{
 		cam = new OrthographicCamera (w, h);
 		goalX = - 1;
 		goalY = - 1;
+		mapW = mapWidth;
+		mapH = mapHeight;
 		this.tileSize = tileSize;
 	}
 
@@ -61,20 +64,30 @@ public class Camera
 				goalY = - 1;
 			}
 		}
+		handleZoom ();
 		cam.update ();
 	}
 
-	public void handleZoom ()
+	private void handleZoom ()
 	{ // Keeps the camera within the bounds of the map.
 		float effectiveViewportWidth = cam.viewportWidth * cam.zoom;
 		float effectiveViewportHeight = cam.viewportHeight * cam.zoom;
-		cam.zoom = MathUtils.clamp (cam.zoom, 0.1f, 100 / cam.viewportWidth);
+		cam.zoom = 
+				MathUtils.clamp (
+						cam.zoom,
+						0.2f,
+						Math.min (mapW / cam.viewportWidth, mapH
+								/ cam.viewportHeight));
+		float leftBoundary = effectiveViewportWidth / 2f;
+		float rightBoundary =
+				leftBoundary + mapW - cam.viewportWidth * cam.zoom;
+		float bottomBoundary = effectiveViewportHeight / 2f;
+		float topBoundary =
+				bottomBoundary + mapH - cam.viewportHeight * cam.zoom;
 		cam.position.x =
-				MathUtils.clamp (cam.position.x, effectiveViewportWidth / 2f,
-						100 - effectiveViewportWidth / 2f);
+				MathUtils.clamp (cam.position.x, leftBoundary, rightBoundary);
 		cam.position.y =
-				MathUtils.clamp (cam.position.y, effectiveViewportHeight / 2f,
-						100 - effectiveViewportHeight / 2f);
+				MathUtils.clamp (cam.position.y, bottomBoundary, topBoundary);
 	}
 
 	public Coordinates <Float> toGameCoords (float screenX, float screenY)

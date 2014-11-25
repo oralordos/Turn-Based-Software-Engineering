@@ -172,8 +172,8 @@ public class PlayerView implements View, Disposable, GestureListener,
 		renderer = new OrthogonalTiledMapRenderer (map, 1.0f / tileSize, batch);
 		float w = Gdx.graphics.getWidth ();
 		float h = Gdx.graphics.getHeight ();
-		cam = new Camera (30.0f, 30.0f * h / w, tileSize);
-		cam.zoom (2.0f);
+		cam = new Camera (30.0f, 30.0f * h / w, tileSize, mapWidth, mapHeight);
+		cam.zoom (1.5f);
 		multiplexer = new InputMultiplexer ();
 		multiplexer.addProcessor (new GestureDetector (this));
 		multiplexer.addProcessor (adapter);
@@ -189,8 +189,6 @@ public class PlayerView implements View, Disposable, GestureListener,
 
 	public void handleInput ()
 	{
-		cam.handleZoom (); // Controls the camera by updating its zoom and
-							// position.
 		if (Gdx.input.isKeyPressed (Input.Keys.ESCAPE))
 			Gdx.app.exit ();
 		if (Gdx.input.isKeyPressed (Input.Keys.LEFT))
@@ -201,12 +199,6 @@ public class PlayerView implements View, Disposable, GestureListener,
 			cam.move (0, 2);
 		if (Gdx.input.isKeyPressed (Input.Keys.DOWN))
 			cam.move (0, - 2);
-		if (Gdx.input.isKeyPressed (Input.Keys.NUM_1))
-			map.getLayers ().get (0)
-					.setVisible ( ! map.getLayers ().get (0).isVisible ());
-		if (Gdx.input.isKeyPressed (Input.Keys.NUM_2))
-			map.getLayers ().get (1)
-					.setVisible ( ! map.getLayers ().get (1).isVisible ());
 	}
 
 	public void resize (int width, int height)
@@ -243,8 +235,8 @@ public class PlayerView implements View, Disposable, GestureListener,
 		{
 			unit.update();
 		}
-		cam.update ();
 		handleInput ();
+		cam.update ();
 	}
 
 	@Override
