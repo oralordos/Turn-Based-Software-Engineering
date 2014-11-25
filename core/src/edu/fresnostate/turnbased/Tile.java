@@ -66,12 +66,12 @@ public class Tile
 		return canCapture;
 	}
 
-	public int capturePoints ()
+	public int getCapturePoints ()
 	{
 		return capturePoints;
 	}
 
-	public int unitRegen ()
+	public int getUnitRegen ()
 	{
 		return unitRegen;
 	}

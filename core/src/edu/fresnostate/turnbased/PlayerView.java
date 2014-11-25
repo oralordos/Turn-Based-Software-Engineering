@@ -241,8 +241,7 @@ public class PlayerView implements View, Disposable, GestureListener,
 	{
 		for (GUnite unit : units)
 		{
-			// TODO uncomment when update is finished.
-			// unit.update();
+			unit.update();
 		}
 		cam.update ();
 		handleInput ();

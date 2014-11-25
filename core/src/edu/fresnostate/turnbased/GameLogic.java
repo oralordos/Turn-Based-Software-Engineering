@@ -1,7 +1,6 @@
 package edu.fresnostate.turnbased;
 
 import java.util.ArrayList;
-import java.util.Currency;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -107,7 +106,7 @@ public class GameLogic implements EventListener, InformationProvider
 		{
 			player.resources.put (ResourceType.MONEY, playerMoney - moneyCost);
 			player.resources.put (ResourceType.FOOD, playerFood - foodCost);
-			Unit newUnit = e.unitType.create (Currentplayer);
+			Unit newUnit = e.unitType.create (Currentplayer, e.x, e.y);
 			units.put (newUnit.UnitId, newUnit);
 			EventManager.queueEvent (new UnitCreatedEvent (newUnit.UnitId));
 		}
@@ -124,7 +123,7 @@ public class GameLogic implements EventListener, InformationProvider
 	{
 		Unit unit = getUnit (unitID);
 		return map.getPathfindingMap (unit.x, unit.y, unit.type.movement,
-				unit.type.move);
+				unit.type.UnitMovement);
 	}
 
 	@Override
