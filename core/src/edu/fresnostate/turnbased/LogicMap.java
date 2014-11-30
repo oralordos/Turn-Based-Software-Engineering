@@ -28,6 +28,13 @@ public class LogicMap
 					tiles =
 							new Tile [tileLayer.getWidth ()] [tileLayer
 									.getHeight ()];
+					for (int x = 0; x < tileLayer.getWidth (); ++ x)
+					{
+						for (int y = 0; y < tileLayer.getHeight (); ++ y)
+						{
+							tiles [x] [y] = new Tile ();
+						}
+					}
 				}
 				for (int x = 0; x < tileLayer.getWidth (); ++ x)
 				{
@@ -36,7 +43,7 @@ public class LogicMap
 						TiledMapTile tile = tileLayer.getCell (x, y).getTile ();
 						// FIXME Change to update an existing tile instead of
 						// overwriting.
-						tiles [x] [y] = new Tile (tile.getProperties ());
+						tiles [x] [y].updateData (tile.getProperties ());
 					}
 				}
 			}
@@ -50,7 +57,8 @@ public class LogicMap
 		{
 			for (int y = 0; y < mapData [x].length; ++ y)
 			{
-				tiles [x] [y] = new Tile (mapData [x] [y]);
+				tiles [x] [y] = new Tile ();
+				tiles [x] [y].updateData (mapData [x] [y]);
 			}
 		}
 	}
