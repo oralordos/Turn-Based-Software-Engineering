@@ -36,6 +36,7 @@ public class InGameState implements GameState
 	@Override
 	public void update ()
 	{
+		EventManager.processEvents ();
 		view.update ();
 	}
 
