@@ -30,9 +30,9 @@ public class GameLogic implements EventListener, InformationProvider, Disposable
 
 	public GameLogic (String mapFileName)
 	{
-		loadMap(mapFileName);
 		playerList = new ArrayList <Player> ();
 		units = new HashMap <Integer, Unit> ();
+		loadMap(mapFileName);
 		EventManager.registerInformationProvider (this);
 		EventManager.addListener (this, EventType.CREATE_UNIT);
 		EventManager.addListener (this, EventType.ATTACK_UNIT);
@@ -167,7 +167,10 @@ public class GameLogic implements EventListener, InformationProvider, Disposable
 	@Override
 	public void dispose ()
 	{
-		// TODO Auto-generated method stub
-		
+		EventManager.unregisterInformationProvider ();
+		EventManager.removeListener (this, EventType.CREATE_UNIT);
+		EventManager.removeListener (this, EventType.ATTACK_UNIT);
+		EventManager.removeListener (this, EventType.MOVE_UNIT);
+		EventManager.removeListener (this, EventType.END_TURN);
 	}
 }
