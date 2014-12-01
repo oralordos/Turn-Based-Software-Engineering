@@ -6,6 +6,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import edu.fresnostate.turnbased.Player;
 import edu.fresnostate.turnbased.Tile;
 import edu.fresnostate.turnbased.Unit;
@@ -22,12 +26,30 @@ import edu.fresnostate.turnbased.pathfinding.PathfindingMap;
 public abstract class EventManager
 {
 	private static Queue <Event>							eventQueue			=
-			new LinkedList <Event> ();
+																						new LinkedList <Event> ();
 	private static InformationProvider						informationProvider	=
-			null;
+																						null;
 	private static Map <EventType, List <EventListener>>	listeners			=
-			new EnumMap <EventType, List <EventListener>> (
-					EventType.class);
+																						new EnumMap <EventType, List <EventListener>> (
+																								EventType.class);
+	private static AssetManager								assets				=
+																						new AssetManager ();
+
+	public static void preloadAssets ()
+	{
+		assets = new AssetManager ();
+		assets.setLoader (TiledMap.class, new TmxMapLoader ());
+		assets.load ("test.tmx", TiledMap.class);
+		assets.load ("Extra Medium.png", Texture.class);
+		assets.load ("Extra Medium2.png", Texture.class);
+		assets.finishLoading ();
+	}
+
+	public static void unloadAssets ()
+	{
+		assets.dispose ();
+		assets = null;
+	}
 
 	/**
 	 * Registers a listener for a specific event.
@@ -38,7 +60,7 @@ public abstract class EventManager
 	 *            The EventType to listen for.
 	 */
 	public static void
-	addListener (EventListener listener, EventType eventType)
+			addListener (EventListener listener, EventType eventType)
 	{
 		if ( ! EventManager.listeners.containsKey (eventType))
 		{
@@ -117,9 +139,14 @@ public abstract class EventManager
 	}
 
 	public static void
-	registerInformationProvider (InformationProvider provider)
+			registerInformationProvider (InformationProvider provider)
 	{
 		EventManager.informationProvider = provider;
+	}
+
+	public static void unregisterInformationProvider ()
+	{
+		EventManager.informationProvider = null;
 	}
 
 	/**
@@ -142,5 +169,10 @@ public abstract class EventManager
 		{
 			return false;
 		}
+	}
+
+	public static <T> T getAsset (String filename, Class <T> type)
+	{
+		return assets.get (filename, type);
 	}
 }
