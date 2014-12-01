@@ -6,18 +6,16 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.assets.loaders.resolvers.ExternalFileHandleResolver;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.input.GestureDetector.GestureListener;
+import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Disposable;
-import com.badlogic.gdx.utils.SerializationException;
 import edu.fresnostate.turnbased.event.CurrentPlayerChangedEvent;
 import edu.fresnostate.turnbased.event.Event;
 import edu.fresnostate.turnbased.event.EventListener;
@@ -146,17 +144,15 @@ public class PlayerView implements View, Disposable, GestureListener,
 		return false;
 	}
 
-	public PlayerView ()
+	public PlayerView (String mapFilename)
 	{
-		try
+		map = EventManager.getAsset (mapFilename, TiledMap.class);
+		for(MapLayer layer : map.getLayers ())
 		{
-			map =
-					new TmxMapLoader (new ExternalFileHandleResolver ())
-							.load ("test.tmx");
-		}
-		catch (SerializationException e)
-		{
-			map = new TmxMapLoader ().load ("test.tmx");
+			if(layer.getName ().startsWith ("Unit Layer"))
+			{
+				layer.setVisible (false);
+			}
 		}
 		tileSize =
 				map.getTileSets ().getTile (1).getTextureRegion ()
