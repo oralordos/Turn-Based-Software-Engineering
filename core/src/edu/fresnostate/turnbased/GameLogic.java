@@ -27,8 +27,9 @@ public class GameLogic implements EventListener, InformationProvider
 	private LogicMap			map;
 	private int					Currentplayer;
 
-	public GameLogic ()
+	public GameLogic (String mapFileName)
 	{
+		loadMap(mapFileName);
 		playerList = new ArrayList <Player> ();
 		units = new HashMap <Integer, Unit> ();
 		EventManager.registerInformationProvider (this);
@@ -36,6 +37,12 @@ public class GameLogic implements EventListener, InformationProvider
 		EventManager.addListener (this, EventType.ATTACK_UNIT);
 		EventManager.addListener (this, EventType.MOVE_UNIT);
 		EventManager.addListener (this, EventType.END_TURN);
+	}
+
+	private void loadMap (String mapFileName)
+	{
+		map = new LogicMap(mapFileName);
+		units.clear ();	
 	}
 
 	@Override
