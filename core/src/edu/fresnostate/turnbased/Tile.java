@@ -40,28 +40,64 @@ public class Tile
 
 	public void updateData (MapProperties p)
 	{
-		// TODO Alter to skip an entry if it is not in the map properties.
-		Max_health = Integer.parseInt (p.get ("health", String.class));
-		Cur_health = Max_health;
-		Defence = Integer.parseInt (p.get ("defence", String.class));
-		canCapture = Boolean.parseBoolean (p.get ("canCapture", String.class));
-		capturePoints =
-				Integer.parseInt (p.get ("capturePoints", String.class));
-		unitRegen = Integer.parseInt (p.get ("unitRegen", String.class));
-		resourceRadius =
-				Integer.parseInt (p.get ("resourceRadius", String.class));
-		income.put (ResourceType.FOOD,
-				Integer.parseInt (p.get ("incomeFood", String.class)));
-		income.put (ResourceType.MONEY,
-				Integer.parseInt (p.get ("incomeMoney", String.class)));
-		Costs.put (MovementType.WALK,
-				Integer.parseInt (p.get ("movementWalk", String.class)));
-		Costs.put (MovementType.FLY,
-				Integer.parseInt (p.get ("movementFly", String.class)));
-		Costs.put (MovementType.TREAD,
-				Integer.parseInt (p.get ("movementTread", String.class)));
-		Costs.put (MovementType.SAIL,
-				Integer.parseInt (p.get ("movementSail", String.class)));
+		if (p.containsKey ("health"))
+		{
+			Max_health = Integer.parseInt (p.get ("health", String.class));
+			Cur_health = Max_health;
+		}
+		if (p.containsKey ("defence"))
+		{
+			Defence = Integer.parseInt (p.get ("defence", String.class));
+		}
+		if (p.containsKey ("canCapture"))
+		{
+			canCapture =
+					Boolean.parseBoolean (p.get ("canCapture", String.class));
+		}
+		if (p.containsKey ("capturePoints"))
+		{
+			capturePoints =
+					Integer.parseInt (p.get ("capturePoints", String.class));
+		}
+		if (p.containsKey ("unitRegen"))
+		{
+			unitRegen = Integer.parseInt (p.get ("unitRegen", String.class));
+		}
+		if (p.containsKey ("resourceRadius"))
+		{
+			resourceRadius =
+					Integer.parseInt (p.get ("resourceRadius", String.class));
+		}
+		if (p.containsKey ("incomeFood"))
+		{
+			income.put (ResourceType.FOOD,
+					Integer.parseInt (p.get ("incomeFood", String.class)));
+		}
+		if (p.containsKey ("incomeMoney"))
+		{
+			income.put (ResourceType.MONEY,
+					Integer.parseInt (p.get ("incomeMoney", String.class)));
+		}
+		if (p.containsKey ("movementWalk"))
+		{
+			Costs.put (MovementType.WALK,
+					Integer.parseInt (p.get ("movementWalk", String.class)));
+		}
+		if (p.containsKey ("movementFly"))
+		{
+			Costs.put (MovementType.FLY,
+					Integer.parseInt (p.get ("movementFly", String.class)));
+		}
+		if (p.containsKey ("movementTread"))
+		{
+			Costs.put (MovementType.TREAD,
+					Integer.parseInt (p.get ("movementTread", String.class)));
+		}
+		if (p.containsKey ("movementSail"))
+		{
+			Costs.put (MovementType.SAIL,
+					Integer.parseInt (p.get ("movementSail", String.class)));
+		}
 	}
 
 	public int getMaxHealth ()
