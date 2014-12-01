@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import com.badlogic.gdx.utils.Disposable;
 import edu.fresnostate.turnbased.event.AttackUnitEvent;
 import edu.fresnostate.turnbased.event.CreateUnitEvent;
 import edu.fresnostate.turnbased.event.CurrentPlayerChangedEvent;
@@ -20,7 +21,7 @@ import edu.fresnostate.turnbased.event.UnitMovedEvent;
 import edu.fresnostate.turnbased.pathfinding.PathfindingMap;
 
 
-public class GameLogic implements EventListener, InformationProvider
+public class GameLogic implements EventListener, InformationProvider, Disposable
 {
 	private List <Player>		playerList;
 	private Map <Integer, Unit>	units;
@@ -161,5 +162,12 @@ public class GameLogic implements EventListener, InformationProvider
 	public Tile getMapTile (int x, int y)
 	{
 		return map.getTile (x, y);
+	}
+
+	@Override
+	public void dispose ()
+	{
+		// TODO Auto-generated method stub
+		
 	}
 }
