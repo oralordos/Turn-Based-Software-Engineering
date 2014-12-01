@@ -5,6 +5,16 @@
  </properties>
  <tileset firstgid="1" name="Extra Medium" tilewidth="32" tileheight="32">
   <image source="Extra Medium.png" trans="ffffff" width="320" height="160"/>
+  <tile id="6">
+   <properties>
+    <property name="type" value="MONSTER"/>
+   </properties>
+  </tile>
+  <tile id="8">
+   <properties>
+    <property name="type" value="INFANTRY"/>
+   </properties>
+  </tile>
  </tileset>
  <tileset firstgid="51" name="Extra Medium2" tilewidth="32" tileheight="32">
   <image source="Extra Medium2.png" trans="ffffff" width="320" height="160"/>
@@ -14,9 +24,20 @@
    eJztzbENACAIBMBnAPdf195oFHgwIRRXnwAQhUGiOZm35WX8ntfzM17Lz3w1N/t9/aPe2x/9nu6Md3dXf9c/+5WPb2vVTPevB7E=
   </data>
  </layer>
- <layer name="Unit Layer" width="30" height="20">
+ <layer name="Unit Layer 0" width="30" height="20">
+  <properties>
+   <property name="player" value="0"/>
+  </properties>
   <data encoding="base64" compression="zlib">
    eJxjYBgFo2BgAedAO2CYgsEWroPNPaNgFIyCUUBLAAClVAAc
+  </data>
+ </layer>
+ <layer name="Unit Layer 1" width="30" height="20">
+  <properties>
+   <property name="player" value="1"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFo2AUDGbAPkLtHgWjYBSMgqEMAFZEAA8=
   </data>
  </layer>
 </map>
