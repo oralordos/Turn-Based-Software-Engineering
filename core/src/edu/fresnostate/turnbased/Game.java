@@ -11,7 +11,7 @@ public class Game extends ApplicationAdapter
 	public void create ()
 	{
 		currentState = null;
-		setState (new InGameState ());
+		setState (new MainMenuState ());
 	}
 
 	@Override
