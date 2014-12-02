@@ -20,13 +20,16 @@ public class Unit
 		UnitcurentHP = type.UnitBaseHP;
 		this.x = x;
 		this.y = y;
+		EventManager.getMapTile(x, y).unitOnID=id;
 	}
 
 	public void Move (List <Coordinates <Integer>> path)
 	{
+		EventManager.getMapTile(x, y).unitOnID=-1;
 		Coordinates <Integer> lastSpace = path.get (path.size () - 1);
 		x = lastSpace.x;
 		y = lastSpace.y;
+		EventManager.getMapTile(x, y).unitOnID=UnitId;
 	}
 
 	public void attack (int targetId)
