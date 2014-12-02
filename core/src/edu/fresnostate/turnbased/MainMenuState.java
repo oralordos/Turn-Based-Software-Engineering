@@ -25,6 +25,13 @@ public class MainMenuState implements GameState
 	private TextButton		buttonPlay, buttonExit;
 	private BitmapFont		white, black;			// done
 	private Label			heading;
+	private Game			 game;
+	
+	
+	public MainMenuState(Game g) {
+		game = g;
+		
+	}
 
 	@Override
 	public void render ()
@@ -64,6 +71,7 @@ public class MainMenuState implements GameState
 			public void clicked (InputEvent event, float x, float y)
 			{
 				// TODO Needs to start the game
+				game.setState(new InGameState());
 			}
 		});
 		buttonPlay.pad (20);
