@@ -11,7 +11,6 @@ import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.utils.Disposable;
-import edu.fresnostate.turnbased.event.AnimationFinishedEvent;
 import edu.fresnostate.turnbased.event.AttackUnitEvent;
 import edu.fresnostate.turnbased.event.CreateUnitEvent;
 import edu.fresnostate.turnbased.event.CurrentPlayerChangedEvent;
