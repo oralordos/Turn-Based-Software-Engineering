@@ -118,9 +118,7 @@ public class GameLogic implements EventListener, InformationProvider, Disposable
 
 	private void handleLoadMap (LoadMapEvent e)
 	{
-		// TODO Auto-generated method stub
-		
-		EventManager.queueEvent (new AnimationFinishedEvent (e) );
+		loadMap(e.filename);
 	}
 
 	private void handleMoveUnit (MoveUnitEvent e)
