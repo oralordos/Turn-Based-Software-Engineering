@@ -1,43 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" width="30" height="20" tilewidth="32" tileheight="32">
+ <properties>
+  <property name="numPlayers" value="2"/>
+ </properties>
  <tileset firstgid="1" name="Extra Medium" tilewidth="32" tileheight="32">
-  <image source="Extra Medium.png" width="320" height="160"/>
-  <tile id="0">
+  <image source="Extra Medium.png" trans="ffffff" width="320" height="160"/>
+  <tile id="6">
    <properties>
-    <property name="canCapture" value="false"/>
-    <property name="capturePoints" value="0"/>
-    <property name="defence" value="20"/>
-    <property name="health" value="100"/>
-    <property name="incomeFood" value="0"/>
-    <property name="incomeMoney" value="0"/>
-    <property name="movementFly" value="1"/>
-    <property name="movementSail" value="-1"/>
-    <property name="movementTread" value="1"/>
-    <property name="movementWalk" value="1"/>
-    <property name="resourceRadius" value="0"/>
-    <property name="unitRegen" value="0"/>
+    <property name="type" value="MONSTER"/>
    </properties>
   </tile>
-  <tile id="12">
+  <tile id="8">
    <properties>
-    <property name="canCapture" value="false"/>
-    <property name="capturePoints" value="0"/>
-    <property name="defence" value="0"/>
-    <property name="health" value="100"/>
-    <property name="incomeFood" value="0"/>
-    <property name="incomeMoney" value="0"/>
-    <property name="movementFly" value="1"/>
-    <property name="movementSail" value="1"/>
-    <property name="movementTread" value="-1"/>
-    <property name="movementWalk" value="-1"/>
-    <property name="resourceRadius" value="0"/>
-    <property name="unitRegen" value="0"/>
+    <property name="type" value="INFANTRY"/>
    </properties>
   </tile>
  </tileset>
- <layer name="Tile Layer 1" width="30" height="20">
+ <tileset firstgid="51" name="Extra Medium2" tilewidth="32" tileheight="32">
+  <image source="Extra Medium2.png" trans="ffffff" width="320" height="160"/>
+ </tileset>
+ <layer name="Tile Layer" width="30" height="20">
   <data encoding="base64" compression="zlib">
-   eJztzbkNACAQA7BkAPZflx4JxP1NCtcmAAYth+jpvbNe6535Wv6K9+evfF939Xv7u97z7nw5+HLwFRHx2IptBYk=
+   eJztzbENACAIBMBnAPdf195oFHgwIRRXnwAQhUGiOZm35WX8ntfzM17Lz3w1N/t9/aPe2x/9nu6Md3dXf9c/+5WPb2vVTPevB7E=
+  </data>
+ </layer>
+ <layer name="Unit Layer 0" width="30" height="20">
+  <properties>
+   <property name="player" value="0"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFo2BgAedAO2CYgsEWroPNPaNgFIyCUUBLAAClVAAc
+  </data>
+ </layer>
+ <layer name="Unit Layer 1" width="30" height="20">
+  <properties>
+   <property name="player" value="1"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFo2AUDGbAPkLtHgWjYBSMgqEMAFZEAA8=
   </data>
  </layer>
 </map>

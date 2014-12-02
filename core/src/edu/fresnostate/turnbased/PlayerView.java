@@ -306,8 +306,13 @@ public class PlayerView implements View, Disposable, GestureListener,
 
 	private void handleUnitCreated (UnitCreatedEvent e)
 	{
-		UnitType unitType = EventManager.getUnit (e.unitID).type;
-		GUnite newUnit = new GUnite (e.unitID, unitType.imageName);
+		Unit logicUnit = EventManager.getUnit(e.unitID);
+		UnitType unitType = logicUnit.type;
+		float x = logicUnit.x;
+		float y = logicUnit.y;
+		int texX = unitType.tileX * tileSize;
+		int texY = unitType.tileY * tileSize;
+		GUnite newUnit = new GUnite (e.unitID, x, y, unitType.imageName, texX, texY, tileSize, tileSize);
 		units.add (newUnit);
 	}
 }
