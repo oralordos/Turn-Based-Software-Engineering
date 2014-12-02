@@ -2,7 +2,7 @@ package edu.fresnostate.turnbased.event;
 
 /**
  * This event is sent whenever a new unit is created.
- * 
+ *
  * @author Daniel
  *
  */

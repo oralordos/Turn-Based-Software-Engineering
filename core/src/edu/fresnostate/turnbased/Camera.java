@@ -1,6 +1,7 @@
 package edu.fresnostate.turnbased;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 
@@ -8,10 +9,22 @@ import com.badlogic.gdx.math.Vector3;
 public class Camera
 {
 	private OrthographicCamera	cam;
+	private float				goalX;
+	private float				goalY;
+	private float				speedX;
+	private float				speedY;
+	private int					tileSize;
+	private int							mapW, mapH;
+	private final static int	FRAMES	= 30;
 
-	public Camera (float w, float h)
+	public Camera (float w, float h, int tileSize, int mapWidth, int mapHeight)
 	{
 		cam = new OrthographicCamera (w, h);
+		goalX = - 1;
+		goalY = - 1;
+		mapW = mapWidth;
+		mapH = mapHeight;
+		this.tileSize = tileSize;
 	}
 
 	public void zoom (float z)
@@ -32,31 +45,69 @@ public class Camera
 
 	public void moveTo (float x, float y)
 	{
+		goalX = x;
+		goalY = y;
+		speedX = (cam.position.x - x) / FRAMES;
+		speedY = (cam.position.y - y) / FRAMES;
 	}
 
-	public void handleZoom ()
+	public void update ()
+	{
+		if (goalX >= 0 && goalY >= 0)
+		{
+			move (speedX, speedY);
+			if (cam.position.x > goalX - 0.01 && cam.position.x < goalX + 0.01
+					&& cam.position.y > goalY - 0.01
+					&& cam.position.y < goalY + 0.01)
+			{
+				goalX = - 1;
+				goalY = - 1;
+			}
+		}
+		handleZoom ();
+		cam.update ();
+	}
+
+	private void handleZoom ()
 	{ // Keeps the camera within the bounds of the map.
 		float effectiveViewportWidth = cam.viewportWidth * cam.zoom;
 		float effectiveViewportHeight = cam.viewportHeight * cam.zoom;
-		cam.zoom = MathUtils.clamp (cam.zoom, 0.1f, 100 / cam.viewportWidth);
+		cam.zoom = 
+				MathUtils.clamp (
+						cam.zoom,
+						0.2f,
+						Math.min (mapW / cam.viewportWidth, mapH
+								/ cam.viewportHeight));
+		float leftBoundary = effectiveViewportWidth / 2f;
+		float rightBoundary =
+				leftBoundary + mapW - cam.viewportWidth * cam.zoom;
+		float bottomBoundary = effectiveViewportHeight / 2f;
+		float topBoundary =
+				bottomBoundary + mapH - cam.viewportHeight * cam.zoom;
 		cam.position.x =
-				MathUtils.clamp (cam.position.x, effectiveViewportWidth / 2f,
-						100 - effectiveViewportWidth / 2f);
+				MathUtils.clamp (cam.position.x, leftBoundary, rightBoundary);
 		cam.position.y =
-				MathUtils.clamp (cam.position.y, effectiveViewportHeight / 2f,
-						100 - effectiveViewportHeight / 2f);
+				MathUtils.clamp (cam.position.y, bottomBoundary, topBoundary);
 	}
 
 	public Coordinates <Float> toGameCoords (float screenX, float screenY)
 	{
-		Vector3 vector = new Vector3 ();
-		cam.getPickRay (screenX, screenY).getEndPoint (vector, 0);
-		return new Coordinates <Float> (vector.x, vector.y);
+		Vector3 vector = cam.position;
+		vector.scl (1.0f / cam.zoom);
+		return new Coordinates <Float> ( (screenX - vector.x) / tileSize,
+				(screenY - vector.z) / tileSize);
 	}
 
 	public Coordinates <Float> fromGameCoords (float x, float y)
 	{
-		Vector3 vector = cam.project (new Vector3 (x, y, 0));
-		return new Coordinates <Float> (vector.x, vector.y);
+		Vector3 vector = cam.position;
+		vector.scl (1.0f / cam.zoom);
+		return new Coordinates <Float> (x * tileSize + vector.x, y * tileSize
+				+ vector.z);
+	}
+
+	public void applyRenderer (OrthogonalTiledMapRenderer renderer)
+	{
+		renderer.setView (cam);
 	}
 }

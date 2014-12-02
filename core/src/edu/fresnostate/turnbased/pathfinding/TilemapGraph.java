@@ -46,13 +46,14 @@ public class TilemapGraph implements Graph
 		int y = getLocalizedY (node);
 		List <Connection> connections = new ArrayList <Connection> (4);
 
-		List<Coordinates<Integer>> coords = new ArrayList <Coordinates<Integer>> (4);
-		coords.add(new Coordinates<Integer> (x - 1, y));
-		coords.add (new Coordinates<Integer> (x + 1, y));
-		coords.add(new Coordinates<Integer> (x, y - 1));
-		coords.add (new Coordinates<Integer> (x, y + 1));
+		List <Coordinates <Integer>> coords =
+				new ArrayList <Coordinates <Integer>> (4);
+		coords.add (new Coordinates <Integer> (x - 1, y));
+		coords.add (new Coordinates <Integer> (x + 1, y));
+		coords.add (new Coordinates <Integer> (x, y - 1));
+		coords.add (new Coordinates <Integer> (x, y + 1));
 
-		for (Coordinates<Integer> currCoord : coords)
+		for (Coordinates <Integer> currCoord : coords)
 		{
 			int currX = currCoord.x;
 			int currY = currCoord.y;
@@ -61,7 +62,7 @@ public class TilemapGraph implements Graph
 			{
 				Tile tile = map.getTile (currX, currY);
 				int movementCost = tile.getmovementcost (currentMovement);
-				if (movementCost > 0)
+				if (movementCost > 0 && tile.unitOnID < 0)
 				{
 					Connection conn =
 							new Connection (movementCost, node, generalize (

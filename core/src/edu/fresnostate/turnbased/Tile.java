@@ -7,7 +7,6 @@ import com.badlogic.gdx.maps.MapProperties;
 
 public class Tile
 {
-
 	private int							Max_health;
 	private int							Cur_health;
 	private int							Defence;
@@ -17,26 +16,88 @@ public class Tile
 	private int							resourceRadius;
 	private Map <ResourceType, Integer>	income;
 	private Map <MovementType, Integer>	Costs;
+	public int							unitOnID;
 
-	public Tile (MapProperties p)
+	public Tile ()
 	{
-		Max_health = p.get ("health", Integer.class);
+		Max_health = 20;
 		Cur_health = Max_health;
-		Defence = p.get ("defence", Integer.class);
-		canCapture = p.get ("canCapture", Boolean.class);
-		capturePoints = p.get ("capturePoints", Integer.class);
-		unitRegen = p.get ("unitRegen", Integer.class);
-		resourceRadius = p.get ("resourceRadius", Integer.class);
-
+		Defence = 0;
+		canCapture = false;
+		capturePoints = 0;
+		unitRegen = 0;
+		resourceRadius = 0;
+		unitOnID = - 1;
 		income = new EnumMap <ResourceType, Integer> (ResourceType.class);
-		income.put (ResourceType.FOOD, p.get ("incomeFood", Integer.class));
-		income.put (ResourceType.MONEY, p.get ("incomeMoney", Integer.class));
-
+		income.put (ResourceType.FOOD, 0);
+		income.put (ResourceType.MONEY, 0);
 		Costs = new EnumMap <MovementType, Integer> (MovementType.class);
-		Costs.put (MovementType.WALK, p.get ("movementWalk", Integer.class));
-		Costs.put (MovementType.FLY, p.get ("movementFly", Integer.class));
-		Costs.put (MovementType.TREAD, p.get ("movementTread", Integer.class));
-		Costs.put (MovementType.SAIL, p.get ("movementSail", Integer.class));
+		Costs.put (MovementType.WALK, 1);
+		Costs.put (MovementType.FLY, 1);
+		Costs.put (MovementType.TREAD, 1);
+		Costs.put (MovementType.SAIL, 0);
+	}
+
+	public void updateData (MapProperties p)
+	{
+		if (p.containsKey ("health"))
+		{
+			Max_health = Integer.parseInt (p.get ("health", String.class));
+			Cur_health = Max_health;
+		}
+		if (p.containsKey ("defence"))
+		{
+			Defence = Integer.parseInt (p.get ("defence", String.class));
+		}
+		if (p.containsKey ("canCapture"))
+		{
+			canCapture =
+					Boolean.parseBoolean (p.get ("canCapture", String.class));
+		}
+		if (p.containsKey ("capturePoints"))
+		{
+			capturePoints =
+					Integer.parseInt (p.get ("capturePoints", String.class));
+		}
+		if (p.containsKey ("unitRegen"))
+		{
+			unitRegen = Integer.parseInt (p.get ("unitRegen", String.class));
+		}
+		if (p.containsKey ("resourceRadius"))
+		{
+			resourceRadius =
+					Integer.parseInt (p.get ("resourceRadius", String.class));
+		}
+		if (p.containsKey ("incomeFood"))
+		{
+			income.put (ResourceType.FOOD,
+					Integer.parseInt (p.get ("incomeFood", String.class)));
+		}
+		if (p.containsKey ("incomeMoney"))
+		{
+			income.put (ResourceType.MONEY,
+					Integer.parseInt (p.get ("incomeMoney", String.class)));
+		}
+		if (p.containsKey ("movementWalk"))
+		{
+			Costs.put (MovementType.WALK,
+					Integer.parseInt (p.get ("movementWalk", String.class)));
+		}
+		if (p.containsKey ("movementFly"))
+		{
+			Costs.put (MovementType.FLY,
+					Integer.parseInt (p.get ("movementFly", String.class)));
+		}
+		if (p.containsKey ("movementTread"))
+		{
+			Costs.put (MovementType.TREAD,
+					Integer.parseInt (p.get ("movementTread", String.class)));
+		}
+		if (p.containsKey ("movementSail"))
+		{
+			Costs.put (MovementType.SAIL,
+					Integer.parseInt (p.get ("movementSail", String.class)));
+		}
 	}
 
 	public int getMaxHealth ()
@@ -64,12 +125,12 @@ public class Tile
 		return canCapture;
 	}
 
-	public int capturePoints ()
+	public int getCapturePoints ()
 	{
 		return capturePoints;
 	}
 
-	public int unitRegen ()
+	public int getUnitRegen ()
 	{
 		return unitRegen;
 	}

@@ -2,7 +2,7 @@ package edu.fresnostate.turnbased.event;
 
 /**
  * This event is sent whenever a unit is destroyed.
- * 
+ *
  * @author Daniel
  *
  */

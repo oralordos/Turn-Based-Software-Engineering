@@ -1,249 +1,46 @@
 package edu.fresnostate.turnbased;
 
 import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.assets.loaders.resolvers.ExternalFileHandleResolver;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.input.GestureDetector;
-import com.badlogic.gdx.input.GestureDetector.GestureListener;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.SerializationException;
 
 
 public class Game extends ApplicationAdapter
 {
-	private final static float			MOUSE_WHEEL_ZOOM	= 1.25f;
-	private int							tileSize;
-	private TiledMap					map;
-	private OrthogonalTiledMapRenderer	renderer;
-	private OrthographicCamera			cam;
-	private InputMultiplexer			multiplexer;
-	private InputAdapter				adapter				=
-																	new InputAdapter ()
-																	{
-																		@Override
-																		public
-																				boolean
-																				scrolled (
-																						int amount)
-																		{
-																			if (amount > 0)
-																			{
-																				cam.zoom *=
-																						MOUSE_WHEEL_ZOOM;
-																			}
-																			else
-																			{
-																				cam.zoom *=
-																						(1 / MOUSE_WHEEL_ZOOM);
-																			}
-																			return true;
-																		}
-																	};
-	private GestureListener				listener			=
-																	new GestureListener ()
-																	{
-																		private float	lastInitial	=
-																											- 1.0f;
-																		private float	lastZoom	=
-																											- 1.0f;
-
-																		@Override
-																		public
-																				boolean
-																				zoom (float initialDistance,
-																						float distance)
-																		{
-																			if (lastInitial != initialDistance)
-																			{
-																				lastInitial =
-																						initialDistance;
-																				lastZoom =
-																						1.0f;
-																			}
-																			float zoom =
-																					initialDistance
-																							/ distance;
-																			cam.zoom *=
-																					zoom
-																							/ lastZoom;
-																			lastZoom =
-																					zoom;
-																			return true;
-																		}
-
-																		@Override
-																		public
-																				boolean
-																				touchDown (
-																						float x,
-																						float y,
-																						int pointer,
-																						int button)
-																		{
-																			return false;
-																		}
-
-																		@Override
-																		public
-																				boolean
-																				tap (float x,
-																						float y,
-																						int count,
-																						int button)
-																		{
-																			return false;
-																		}
-
-																		@Override
-																		public
-																				boolean
-																				pinch (Vector2 initialPointer1,
-																						Vector2 initialPointer2,
-																						Vector2 pointer1,
-																						Vector2 pointer2)
-																		{
-																			return false;
-																		}
-
-																		@Override
-																		public
-																				boolean
-																				panStop (
-																						float x,
-																						float y,
-																						int pointer,
-																						int button)
-																		{
-																			return false;
-																		}
-
-																		@Override
-																		public
-																				boolean
-																				pan (float x,
-																						float y,
-																						float deltaX,
-																						float deltaY)
-																		{
-																			cam.translate (
-																					- deltaX
-																							* cam.zoom
-																							/ tileSize,
-																					deltaY
-																							* cam.zoom
-																							/ tileSize);
-																			return true;
-																		}
-
-																		@Override
-																		public
-																				boolean
-																				longPress (
-																						float x,
-																						float y)
-																		{
-																			return false;
-																		}
-
-																		@Override
-																		public
-																				boolean
-																				fling (float velocityX,
-																						float velocityY,
-																						int button)
-																		{
-																			return false;
-																		}
-																	};
+	private GameState	currentState;
 
 	@Override
 	public void create ()
 	{
-		try
-		{
-			map =
-					new TmxMapLoader (new ExternalFileHandleResolver ())
-							.load ("test.tmx");
-		}
-		catch (SerializationException e)
-		{
-			map = new TmxMapLoader ().load ("test.tmx");
-		}
-		tileSize =
-				map.getTileSets ().getTile (1).getTextureRegion ()
-						.getRegionWidth ();
-		renderer = new OrthogonalTiledMapRenderer (map, 1.0f / tileSize);
-		float w = Gdx.graphics.getWidth ();
-		float h = Gdx.graphics.getHeight ();
-		cam = new OrthographicCamera (w / tileSize, h / tileSize);
-		cam.zoom = 2.0f;
-		multiplexer = new InputMultiplexer ();
-		multiplexer.addProcessor (new GestureDetector (listener));
-		multiplexer.addProcessor (adapter);
-		Gdx.input.setInputProcessor (multiplexer);
+		currentState = null;
+		setState (new InGameState ());
 	}
 
 	@Override
 	public void render ()
 	{
-		handleZoom (); // Controls the camera by updating its zoom and position.
-		Gdx.gl.glClearColor (0, 0, 0, 1);
-		Gdx.gl.glClear (GL20.GL_COLOR_BUFFER_BIT);
-		cam.update ();
-		renderer.setView (cam);
-		renderer.render ();
-		if (Gdx.input.isKeyPressed (Input.Keys.ESCAPE))
-			Gdx.app.exit ();
-		if (Gdx.input.isKeyPressed (Input.Keys.LEFT))
-			cam.translate ( - 2, 0);
-		if (Gdx.input.isKeyPressed (Input.Keys.RIGHT))
-			cam.translate (2, 0);
-		if (Gdx.input.isKeyPressed (Input.Keys.UP))
-			cam.translate (0, 2);
-		if (Gdx.input.isKeyPressed (Input.Keys.DOWN))
-			cam.translate (0, - 2);
-		if (Gdx.input.isKeyPressed (Input.Keys.NUM_1))
-			map.getLayers ().get (0)
-					.setVisible ( ! map.getLayers ().get (0).isVisible ());
-		if (Gdx.input.isKeyPressed (Input.Keys.NUM_2))
-			map.getLayers ().get (1)
-					.setVisible ( ! map.getLayers ().get (1).isVisible ());
-	}
-
-	public void handleZoom ()
-	{ // Keeps the camera within the bounds of the map.
-		float effectiveViewportWidth = cam.viewportWidth * cam.zoom;
-		float effectiveViewportHeight = cam.viewportHeight * cam.zoom;
-		cam.zoom = MathUtils.clamp (cam.zoom, 0.1f, 100 / cam.viewportWidth);
-		cam.position.x =
-				MathUtils.clamp (cam.position.x, effectiveViewportWidth / 2f,
-						100 - effectiveViewportWidth / 2f);
-		cam.position.y =
-				MathUtils.clamp (cam.position.y, effectiveViewportHeight / 2f,
-						100 - effectiveViewportHeight / 2f);
+		currentState.update ();
+		currentState.render ();
 	}
 
 	@Override
 	public void resize (int width, int height)
 	{
-		cam.viewportWidth = 30f; // Viewport of 30 units.
-		cam.viewportHeight = 30f * height / width; // Keeps things in
-													// proportion.
+		currentState.resize (width, height);
 	}
 
 	@Override
 	public void dispose ()
 	{
-		renderer.dispose ();
-		map.dispose ();
+		currentState.exit ();
+		currentState = null;
+	}
+
+	public void setState (GameState newState)
+	{
+		if (currentState != null)
+		{
+			currentState.exit ();
+		}
+		currentState = newState;
+		newState.enter ();
 	}
 }

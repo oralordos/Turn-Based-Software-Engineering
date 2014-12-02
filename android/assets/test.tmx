@@ -1,35 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="50" height="50" tilewidth="16" tileheight="16">
+<map version="1.0" orientation="orthogonal" width="30" height="20" tilewidth="32" tileheight="32">
  <properties>
-  <property name="powerup" value="4"/>
-  <property name="red" value=""/>
+  <property name="numPlayers" value="2"/>
  </properties>
- <tileset firstgid="1" name="tileset" tilewidth="16" tileheight="16">
-  <image source="tileset.png" width="256" height="128"/>
-  <tile id="38">
+ <tileset firstgid="1" name="Extra Medium" tilewidth="32" tileheight="32">
+  <image source="Extra Medium.png" trans="ffffff" width="320" height="160"/>
+  <tile id="6">
    <properties>
-    <property name="House" value="5"/>
+    <property name="type" value="MONSTER"/>
    </properties>
   </tile>
-  <tile id="39">
+  <tile id="8">
    <properties>
-    <property name="House" value="5"/>
-   </properties>
-  </tile>
-  <tile id="54">
-   <properties>
-    <property name="House" value="5"/>
-   </properties>
-  </tile>
-  <tile id="55">
-   <properties>
-    <property name="House" value="5"/>
+    <property name="type" value="INFANTRY"/>
    </properties>
   </tile>
  </tileset>
- <layer name="Tile Layer 1" width="50" height="50">
+ <tileset firstgid="51" name="Extra Medium2" tilewidth="32" tileheight="32">
+  <image source="Extra Medium2.png" trans="ffffff" width="320" height="160"/>
+ </tileset>
+ <layer name="Tile Layer" width="30" height="20">
   <data encoding="base64" compression="zlib">
-   eJzt1s0NwjAMhuFcmQCpdygL8LMBbED3nwRz6KWkJbIjYpP3kXxJWsmfalVO6dMuc+bVXeqxchcpx1NqWrmLlGN2kDouzkpy5N5r6Sx1WZyV5Mi9503Eucr55xzjz7uwK/keYyrL9n7mZGtHrWaOq9TN1o5azRwt7aUGZfVqaz+KZGs/0vK2a2hF2DUAb/g3ooVe567X3IjN09xaevE0t556AQAgOk+7igX7Ab5h1gEAtbwAC1cRBg==
+   eJztzbENACAIBMBnAPdf195oFHgwIRRXnwAQhUGiOZm35WX8ntfzM17Lz3w1N/t9/aPe2x/9nu6Md3dXf9c/+5WPb2vVTPevB7E=
+  </data>
+ </layer>
+ <layer name="Unit Layer 0" width="30" height="20">
+  <properties>
+   <property name="player" value="0"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFo2BgAedAO2CYgsEWroPNPaNgFIyCUUBLAAClVAAc
+  </data>
+ </layer>
+ <layer name="Unit Layer 1" width="30" height="20">
+  <properties>
+   <property name="player" value="1"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFo2AUDGbAPkLtHgWjYBSMgqEMAFZEAA8=
   </data>
  </layer>
 </map>
