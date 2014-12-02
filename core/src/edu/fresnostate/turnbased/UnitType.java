@@ -8,7 +8,9 @@ public enum UnitType
 {
 	INFANTRY (10, 2, 3, 4, 1, 200, 200, MovementType.WALK, "Extra Medium.png", 8, 0),
 	TANK (10, 4, 4, 4, 1, 1000, 500, MovementType.TREAD, "Extra Medium.png", 7, 0),
-	MONSTER (10, 3, 4, 5, 2, 500, 1200, MovementType.FLY, "Extra Medium.png", 6, 0);
+	MONSTER (10, 3, 4, 5, 2, 500, 1200, MovementType.FLY, "Extra Medium.png", 6, 0),
+	OtherOne (10, 2, 3, 4, 1, 200, 200, MovementType.WALK, "Extra Medium.png", 8, 0),
+	Othertwo (10, 4, 4, 4, 1, 1000, 500, MovementType.TREAD, "Extra Medium.png", 7, 0);
 	final int							UnitBaseHP;
 	final int							UnitAD;
 	final int							UnitMovement;
