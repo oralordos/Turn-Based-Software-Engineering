@@ -11,6 +11,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.utils.Disposable;
+import edu.fresnostate.turnbased.event.AnimationFinishedEvent;
 import edu.fresnostate.turnbased.event.AttackUnitEvent;
 import edu.fresnostate.turnbased.event.CreateUnitEvent;
 import edu.fresnostate.turnbased.event.CurrentPlayerChangedEvent;
@@ -20,6 +21,7 @@ import edu.fresnostate.turnbased.event.EventListener;
 import edu.fresnostate.turnbased.event.EventManager;
 import edu.fresnostate.turnbased.event.EventType;
 import edu.fresnostate.turnbased.event.InformationProvider;
+import edu.fresnostate.turnbased.event.LoadMapEvent;
 import edu.fresnostate.turnbased.event.MoveUnitEvent;
 import edu.fresnostate.turnbased.event.UnitAttackedEvent;
 import edu.fresnostate.turnbased.event.UnitCreatedEvent;
@@ -38,8 +40,9 @@ public class GameLogic implements EventListener, InformationProvider, Disposable
 	{
 		playerList = new ArrayList <Player> ();
 		units = new HashMap <Integer, Unit> ();
-		loadMap(mapFileName);
 		EventManager.registerInformationProvider (this);
+		loadMap(mapFileName);
+		EventManager.addListener (this, EventType.LOAD_MAP);
 		EventManager.addListener (this, EventType.CREATE_UNIT);
 		EventManager.addListener (this, EventType.ATTACK_UNIT);
 		EventManager.addListener (this, EventType.MOVE_UNIT);
@@ -56,7 +59,7 @@ public class GameLogic implements EventListener, InformationProvider, Disposable
 		playerList.clear ();
 		for (int i = 0; i < numPlayers; ++ i)
 		{
-		playerList.add (new Player ());
+			playerList.add (new Player ());
 		}
 		for (MapLayer layer : tMap.getLayers ())
 		{
@@ -105,9 +108,19 @@ public class GameLogic implements EventListener, InformationProvider, Disposable
 		case END_TURN :
 			handleEndTurn ((EndTurnEvent) e);
 			break;
+		case LOAD_MAP :
+			handleLoadMap ((LoadMapEvent) e);
+			break;
 		default :
 			break;
 		}
+	}
+
+	private void handleLoadMap (LoadMapEvent e)
+	{
+		// TODO Auto-generated method stub
+		
+		EventManager.queueEvent (new AnimationFinishedEvent (e) );
 	}
 
 	private void handleMoveUnit (MoveUnitEvent e)
@@ -146,7 +159,7 @@ public class GameLogic implements EventListener, InformationProvider, Disposable
 	 */
 	private void handleCreateUnit (CreateUnitEvent e)
 	{
-		// enough cost and play is owns tile.
+		// TODO make sure player owns tile in the IF
 		Player player = getPlayer (Currentplayer);
 		int playerMoney = player.resources.get (ResourceType.MONEY);
 		int playerFood = player.resources.get (ResourceType.FOOD);
@@ -214,5 +227,6 @@ public class GameLogic implements EventListener, InformationProvider, Disposable
 		EventManager.removeListener (this, EventType.ATTACK_UNIT);
 		EventManager.removeListener (this, EventType.MOVE_UNIT);
 		EventManager.removeListener (this, EventType.END_TURN);
+		EventManager.removeListener (this, EventType.LOAD_MAP);
 	}
 }
