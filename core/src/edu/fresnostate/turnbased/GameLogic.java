@@ -4,6 +4,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import com.badlogic.gdx.maps.MapLayer;
+import com.badlogic.gdx.maps.MapProperties;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTile;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.utils.Disposable;
 import edu.fresnostate.turnbased.event.AttackUnitEvent;
 import edu.fresnostate.turnbased.event.CreateUnitEvent;
@@ -43,7 +49,43 @@ public class GameLogic implements EventListener, InformationProvider, Disposable
 	private void loadMap (String mapFileName)
 	{
 		map = new LogicMap(mapFileName);
-		units.clear ();	
+		units.clear ();
+		TiledMap tMap = EventManager.getAsset (mapFileName, TiledMap.class);
+		MapProperties mapProp = tMap.getProperties ();
+		int numPlayers = Integer.parseInt (mapProp.get ("numPlayers", String.class));
+		playerList.clear ();
+		for (int i = 0; i < numPlayers; ++ i)
+		{
+		playerList.add (new Player ());
+		}
+		for (MapLayer layer : tMap.getLayers ())
+		{
+			if (layer.getName ().startsWith ("Unit Layer"))
+			{
+				TiledMapTileLayer tLayer = (TiledMapTileLayer) layer;
+				MapProperties layerProp = tLayer.getProperties ();
+				int player = Integer.parseInt (layerProp.get ("player", String.class));
+				for (int x = 0; x < tLayer.getWidth (); ++ x)
+				{
+					for (int y = 0; y < tLayer.getHeight (); ++ y)
+					{
+						Cell cell = tLayer.getCell (x, y);
+						if (cell != null)
+						{
+							TiledMapTile tile = cell.getTile ();
+							if (tile != null)
+							{
+								MapProperties tileProp = tile.getProperties ();
+								String unitType = tileProp.get ("type", String.class);
+								Unit newUnit = UnitType.create (unitType, player, x, y);
+								units.put (newUnit.UnitId, newUnit);
+								EventManager.queueEvent (new UnitCreatedEvent (newUnit.UnitId));
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 
 	@Override
