@@ -45,6 +45,7 @@ public class PlayerView implements View, Disposable, GestureListener,
 	private int							currentPlayer;
 	private List <GUnite>				units;
 	private int							selectedUnit;
+	private GuiManager					gui;
 	private InputAdapter				adapter				=
 																	new InputAdapter ()
 																	{
@@ -214,6 +215,7 @@ public class PlayerView implements View, Disposable, GestureListener,
 			unit.render (batch);
 		}
 		// TODO draw GUI
+		gui.render (batch);
 		batch.end ();
 	}
 
