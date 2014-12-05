@@ -100,11 +100,13 @@ public class PlayerView implements View, Disposable, GestureListener,
 		if (tile.unitOnID >= 0)
 		{
 			selectedUnit = tile.unitOnID;
-			pathMap = EventManager.getPathMap (selectedUnit);
+			updatePathMap ();
 		}
 		else if (selectedUnit >= 0)
 		{
-			if (pathMap.hasPathTo (gameX, gameY))
+			Unit unit = EventManager.getUnit (selectedUnit);
+			if (unit.player == currentPlayer
+					&& pathMap.hasPathTo (gameX, gameY))
 			{
 				MoveUnitEvent event =
 						new MoveUnitEvent (selectedUnit, pathMap.getPathTo (
@@ -316,7 +318,10 @@ public class PlayerView implements View, Disposable, GestureListener,
 
 	private void handleUnitMoved (UnitMovedEvent e)
 	{
-		pathMap = EventManager.getPathMap (e.unitID);
+		if (selectedUnit == e.unitID)
+		{
+			updatePathMap ();
+		}
 		GUnite unit = getGUnit (e.unitID);
 		unit.move (e.path);
 	}
@@ -363,5 +368,17 @@ public class PlayerView implements View, Disposable, GestureListener,
 		float y = logicUnit.y;
 		GUnite newUnit = new GUnite (e.unitID, x, y, tileSize);
 		units.add (newUnit);
+	}
+
+	private void updatePathMap ()
+	{
+		if (EventManager.getUnit (selectedUnit).player == currentPlayer)
+		{
+			pathMap = EventManager.getPathMap (selectedUnit);
+		}
+		else
+		{
+			pathMap = null;
+		}
 	}
 }

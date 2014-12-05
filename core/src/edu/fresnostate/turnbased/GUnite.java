@@ -32,6 +32,11 @@ public class GUnite implements Disposable
 		TextureRegion [ ][ ] regions =
 				TextureRegion.split (tex, tileSize, tileSize);
 		image = regions [type.tileY] [type.tileX];
+		createTeamIndicator (unit, tileSize);
+	}
+	
+	private void createTeamIndicator(Unit unit, int tileSize)
+	{
 		Pixmap pix = new Pixmap (INDICATOR_PIXEL_SIZE, INDICATOR_PIXEL_SIZE, Format.RGB888);
 		PlayerColor color = EventManager.getPlayer (unit.player).color;
 		pix.setColor (color.red, color.green, color.blue, color.alpha);
