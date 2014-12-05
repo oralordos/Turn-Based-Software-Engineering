@@ -58,7 +58,7 @@ public class GameLogic implements EventListener, InformationProvider, Disposable
 		playerList.clear ();
 		for (int i = 0; i < numPlayers; ++ i)
 		{
-			playerList.add (new Player ());
+			playerList.add (new Player (i));
 		}
 		for (MapLayer layer : tMap.getLayers ())
 		{

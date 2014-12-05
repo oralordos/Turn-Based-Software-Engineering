@@ -2,16 +2,14 @@ package edu.fresnostate.turnbased;
 
 public enum PlayerColor
 {
-	RED (255, 0, 0, 255), BLUE (0, 0, 255, 255), GREEN (0, 255, 0, 255), WHITE (
-			255, 255, 255, 255), YELLOW (255, 255, 0, 255),
-	BLACK (0, 0, 0, 255);
+	RED (1, 0, 0, 1), BLUE (0, 0, 1, 1), GREEN (0, 1, 0, 1),
+	WHITE (1, 1, 1, 1), YELLOW (1, 1, 0, 1), BLACK (0, 0, 0, 1);
+	public final float	red;
+	public final float	green;
+	public final float	blue;
+	public final float	alpha;
 
-	public final int	red;
-	public final int	green;
-	public final int	blue;
-	public final int	alpha;
-
-	PlayerColor (int r, int g, int b, int a)
+	PlayerColor (float r, float g, float b, float a)
 	{
 		red = r;
 		green = g;

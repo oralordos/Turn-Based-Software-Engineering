@@ -236,12 +236,13 @@ public class PlayerView implements View, Disposable, GestureListener,
 		}
 		if (pathMap != null)
 		{
-			Texture image = EventManager.getAsset ("movehighlight.png", Texture.class);
+			Texture image =
+					EventManager.getAsset ("movehighlight.png", Texture.class);
 			for (int x = 0; x < EventManager.getMapWidth (); ++ x)
 			{
 				for (int y = 0; y < EventManager.getMapHeight (); ++ y)
 				{
-					if(pathMap.hasPathTo (x, y))
+					if (pathMap.hasPathTo (x, y))
 					{
 						batch.draw (image, x, y, 1, 1);
 					}
@@ -358,14 +359,9 @@ public class PlayerView implements View, Disposable, GestureListener,
 	private void handleUnitCreated (UnitCreatedEvent e)
 	{
 		Unit logicUnit = EventManager.getUnit (e.unitID);
-		UnitType unitType = logicUnit.type;
 		float x = logicUnit.x;
 		float y = logicUnit.y;
-		int texX = unitType.tileX * tileSize;
-		int texY = unitType.tileY * tileSize;
-		GUnite newUnit =
-				new GUnite (e.unitID, x, y, unitType.imageName, texX, texY,
-						tileSize, tileSize);
+		GUnite newUnit = new GUnite (e.unitID, x, y, tileSize);
 		units.add (newUnit);
 	}
 }

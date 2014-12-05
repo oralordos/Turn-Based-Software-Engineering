@@ -7,9 +7,11 @@ import java.util.Map;
 public class Player
 {
 	public Map <ResourceType, Integer>	resources;
+	public final PlayerColor			color;
 
-	public Player ()
+	public Player (int playerNum)
 	{
 		resources = new HashMap <ResourceType, Integer> ();
+		color = PlayerColor.values () [playerNum];
 	}
 }
