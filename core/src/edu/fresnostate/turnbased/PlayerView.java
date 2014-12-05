@@ -47,6 +47,7 @@ public class PlayerView implements View, Disposable, GestureListener,
 	private List <GUnite>				units;
 	private int							selectedUnit;
 	private GuiManager					gui;
+	private PathfindingMap				pathMap;
 	private InputAdapter				adapter				=
 																	new InputAdapter ()
 																	{
@@ -98,12 +99,11 @@ public class PlayerView implements View, Disposable, GestureListener,
 		if (tile.unitOnID >= 0)
 		{
 			selectedUnit = tile.unitOnID;
+			pathMap = EventManager.getPathMap (selectedUnit);
 		}
 		else if (selectedUnit >= 0)
 		{
-			PathfindingMap pathMap = EventManager.getPathMap (selectedUnit);
 			if (pathMap.hasPathTo (gameX, gameY))
-				;
 			{
 				MoveUnitEvent event =
 						new MoveUnitEvent (selectedUnit, pathMap.getPathTo (
@@ -154,6 +154,7 @@ public class PlayerView implements View, Disposable, GestureListener,
 		currentPlayer = 0;
 		selectedUnit = - 1;
 		gui = new GuiManager ();
+		pathMap = null;
 		Gdx.gl.glClearColor (0, 0, 0, 1);
 		loadMap (mapFilename);
 		// Find tile size
@@ -170,7 +171,7 @@ public class PlayerView implements View, Disposable, GestureListener,
 		float w = Gdx.graphics.getWidth ();
 		float h = Gdx.graphics.getHeight ();
 		// Create camera
-		cam = new Camera (30.0f, 30.0f * h / w, tileSize, mapWidth, mapHeight);
+		cam = new Camera (30.0f, 30.0f * h / w, mapWidth, mapHeight);
 		cam.zoom (1.5f);
 		// Setup input
 		multiplexer = new InputMultiplexer ();
@@ -192,9 +193,9 @@ public class PlayerView implements View, Disposable, GestureListener,
 		// Load map
 		map = EventManager.getAsset (mapFilename, TiledMap.class);
 		// Disable drawing unit layers in map
-		for(MapLayer layer : map.getLayers ())
+		for (MapLayer layer : map.getLayers ())
 		{
-			if(layer.getName ().startsWith ("Unit Layer"))
+			if (layer.getName ().startsWith ("Unit Layer"))
 			{
 				layer.setVisible (false);
 			}
@@ -255,7 +256,7 @@ public class PlayerView implements View, Disposable, GestureListener,
 	{
 		for (GUnite unit : units)
 		{
-			unit.update();
+			unit.update ();
 		}
 		handleInput ();
 		cam.update ();
@@ -284,7 +285,7 @@ public class PlayerView implements View, Disposable, GestureListener,
 		case UNIT_MOVED :
 			handleUnitMoved ((UnitMovedEvent) e);
 			break;
-		case LOAD_MAP:
+		case LOAD_MAP :
 			handleLoadMap ((LoadMapEvent) e);
 			break;
 		default :
@@ -294,7 +295,7 @@ public class PlayerView implements View, Disposable, GestureListener,
 
 	private void handleLoadMap (LoadMapEvent e)
 	{
-		loadMap(e.filename);
+		loadMap (e.filename);
 	}
 
 	private void handleUnitMoved (UnitMovedEvent e)
@@ -340,13 +341,15 @@ public class PlayerView implements View, Disposable, GestureListener,
 
 	private void handleUnitCreated (UnitCreatedEvent e)
 	{
-		Unit logicUnit = EventManager.getUnit(e.unitID);
+		Unit logicUnit = EventManager.getUnit (e.unitID);
 		UnitType unitType = logicUnit.type;
 		float x = logicUnit.x;
 		float y = logicUnit.y;
 		int texX = unitType.tileX * tileSize;
 		int texY = unitType.tileY * tileSize;
-		GUnite newUnit = new GUnite (e.unitID, x, y, unitType.imageName, texX, texY, tileSize, tileSize);
+		GUnite newUnit =
+				new GUnite (e.unitID, x, y, unitType.imageName, texX, texY,
+						tileSize, tileSize);
 		units.add (newUnit);
 	}
 }
