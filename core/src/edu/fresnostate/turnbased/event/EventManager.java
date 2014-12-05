@@ -43,6 +43,7 @@ public abstract class EventManager
 		assets.load ("Extra Medium.png", Texture.class);
 		assets.load ("Extra Medium2.png", Texture.class);
 		assets.load ("movehighlight.png", Texture.class);
+		assets.load ("acthighlight.png", Texture.class);
 		assets.finishLoading ();
 	}
 

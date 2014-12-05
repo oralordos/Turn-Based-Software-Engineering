@@ -17,6 +17,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Disposable;
+import edu.fresnostate.turnbased.event.AttackUnitEvent;
 import edu.fresnostate.turnbased.event.CurrentPlayerChangedEvent;
 import edu.fresnostate.turnbased.event.Event;
 import edu.fresnostate.turnbased.event.EventListener;
@@ -99,8 +100,37 @@ public class PlayerView implements View, Disposable, GestureListener,
 		Tile tile = EventManager.getMapTile (gameX, gameY);
 		if (tile.unitOnID >= 0)
 		{
-			selectedUnit = tile.unitOnID;
-			updatePathMap ();
+			if (selectedUnit >= 0)
+			{
+				Unit oldUnit = EventManager.getUnit (selectedUnit);
+				if (oldUnit.player == currentPlayer)
+				{
+					Unit targetUnit = EventManager.getUnit (tile.unitOnID);
+					if (oldUnit.player != targetUnit.player
+							&& oldUnit.isInRange (tile.unitOnID))
+					{
+						AttackUnitEvent event =
+								new AttackUnitEvent (selectedUnit,
+										tile.unitOnID);
+						EventManager.queueEvent (event);
+					}
+					else
+					{
+						selectedUnit = tile.unitOnID;
+						updatePathMap ();
+					}
+				}
+				else
+				{
+					selectedUnit = tile.unitOnID;
+					updatePathMap ();
+				}
+			}
+			else
+			{
+				selectedUnit = tile.unitOnID;
+				updatePathMap ();
+			}
 		}
 		else if (selectedUnit >= 0)
 		{
@@ -112,6 +142,11 @@ public class PlayerView implements View, Disposable, GestureListener,
 						new MoveUnitEvent (selectedUnit, pathMap.getPathTo (
 								gameX, gameY));
 				EventManager.queueEvent (event);
+			}
+			else
+			{
+				selectedUnit = - 1;
+				updatePathMap ();
 			}
 		}
 		return true;
@@ -232,24 +267,37 @@ public class PlayerView implements View, Disposable, GestureListener,
 		cam.applyRenderer (renderer);
 		renderer.render ();
 		batch.begin ();
-		for (GUnite unit : units)
-		{
-			unit.render (batch);
-		}
 		if (pathMap != null)
 		{
-			Texture image =
+			Texture moveImage =
 					EventManager.getAsset ("movehighlight.png", Texture.class);
+			Texture attackImage =
+					EventManager.getAsset ("acthighlight.png", Texture.class);
 			for (int x = 0; x < EventManager.getMapWidth (); ++ x)
 			{
 				for (int y = 0; y < EventManager.getMapHeight (); ++ y)
 				{
-					if (pathMap.hasPathTo (x, y))
+					Tile tile = EventManager.getMapTile (x, y);
+					if (tile.unitOnID >= 0)
 					{
-						batch.draw (image, x, y, 1, 1);
+						Unit target = EventManager.getUnit (tile.unitOnID);
+						Unit selected = EventManager.getUnit (selectedUnit);
+						if (target.player != selected.player
+								&& selected.isInRange (tile.unitOnID))
+						{
+							batch.draw (attackImage, x, y, 1, 1);
+						}
+					}
+					else if (pathMap.hasPathTo (x, y))
+					{
+						batch.draw (moveImage, x, y, 1, 1);
 					}
 				}
 			}
+		}
+		for (GUnite unit : units)
+		{
+			unit.render (batch);
 		}
 		gui.render (batch);
 		batch.end ();
@@ -372,7 +420,8 @@ public class PlayerView implements View, Disposable, GestureListener,
 
 	private void updatePathMap ()
 	{
-		if (EventManager.getUnit (selectedUnit).player == currentPlayer)
+		if (selectedUnit >= 0
+				&& EventManager.getUnit (selectedUnit).player == currentPlayer)
 		{
 			pathMap = EventManager.getPathMap (selectedUnit);
 		}
