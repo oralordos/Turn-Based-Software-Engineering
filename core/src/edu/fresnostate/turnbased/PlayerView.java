@@ -7,6 +7,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.input.GestureDetector.GestureListener;
@@ -233,6 +234,20 @@ public class PlayerView implements View, Disposable, GestureListener,
 		{
 			unit.render (batch);
 		}
+		if (pathMap != null)
+		{
+			Texture image = EventManager.getAsset ("movehighlight.png", Texture.class);
+			for (int x = 0; x < EventManager.getMapWidth (); ++ x)
+			{
+				for (int y = 0; y < EventManager.getMapHeight (); ++ y)
+				{
+					if(pathMap.hasPathTo (x, y))
+					{
+						batch.draw (image, x, y, 1, 1);
+					}
+				}
+			}
+		}
 		gui.render (batch);
 		batch.end ();
 	}
@@ -300,6 +315,7 @@ public class PlayerView implements View, Disposable, GestureListener,
 
 	private void handleUnitMoved (UnitMovedEvent e)
 	{
+		pathMap = EventManager.getPathMap (e.unitID);
 		GUnite unit = getGUnit (e.unitID);
 		unit.move (e.path);
 	}

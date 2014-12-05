@@ -42,6 +42,7 @@ public abstract class EventManager
 		assets.load ("test.tmx", TiledMap.class);
 		assets.load ("Extra Medium.png", Texture.class);
 		assets.load ("Extra Medium2.png", Texture.class);
+		assets.load ("movehighlight.png", Texture.class);
 		assets.finishLoading ();
 	}
 
