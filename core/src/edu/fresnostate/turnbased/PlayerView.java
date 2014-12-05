@@ -21,6 +21,7 @@ import edu.fresnostate.turnbased.event.Event;
 import edu.fresnostate.turnbased.event.EventListener;
 import edu.fresnostate.turnbased.event.EventManager;
 import edu.fresnostate.turnbased.event.EventType;
+import edu.fresnostate.turnbased.event.LoadMapEvent;
 import edu.fresnostate.turnbased.event.MoveUnitEvent;
 import edu.fresnostate.turnbased.event.UnitAttackedEvent;
 import edu.fresnostate.turnbased.event.UnitCreatedEvent;
@@ -147,7 +148,50 @@ public class PlayerView implements View, Disposable, GestureListener,
 
 	public PlayerView (String mapFilename)
 	{
+		// Default values for some variables
+		units = new ArrayList <GUnite> ();
+		batch = new SpriteBatch ();
+		currentPlayer = 0;
+		selectedUnit = - 1;
+		gui = new GuiManager ();
+		Gdx.gl.glClearColor (0, 0, 0, 1);
+		loadMap (mapFilename);
+		// Find tile size
+		tileSize =
+				map.getTileSets ().getTile (1).getTextureRegion ()
+						.getRegionWidth ();
+		renderer = new OrthogonalTiledMapRenderer (map, 1.0f / tileSize, batch);
+		// Find map size
+		TiledMapTileLayer mapLayer =
+				(TiledMapTileLayer) (map.getLayers ().get (0));
+		int mapWidth = mapLayer.getWidth ();
+		int mapHeight = mapLayer.getHeight ();
+		// Find window size
+		float w = Gdx.graphics.getWidth ();
+		float h = Gdx.graphics.getHeight ();
+		// Create camera
+		cam = new Camera (30.0f, 30.0f * h / w, tileSize, mapWidth, mapHeight);
+		cam.zoom (1.5f);
+		// Setup input
+		multiplexer = new InputMultiplexer ();
+		multiplexer.addProcessor (new GestureDetector (this));
+		multiplexer.addProcessor (adapter);
+		Gdx.input.setInputProcessor (multiplexer);
+		// Register interest in certain event types
+		EventManager.addListener (this, EventType.UNIT_ATTACKED);
+		EventManager.addListener (this, EventType.UNIT_DESTROYED);
+		EventManager.addListener (this, EventType.UNIT_CREATED);
+		EventManager.addListener (this, EventType.CURRENT_PLAYER_CHANGED);
+		EventManager.addListener (this, EventType.WINDOW_RESIZED);
+		EventManager.addListener (this, EventType.UNIT_MOVED);
+		EventManager.addListener (this, EventType.LOAD_MAP);
+	}
+
+	private void loadMap (String mapFilename)
+	{
+		// Load map
 		map = EventManager.getAsset (mapFilename, TiledMap.class);
+		// Disable drawing unit layers in map
 		for(MapLayer layer : map.getLayers ())
 		{
 			if(layer.getName ().startsWith ("Unit Layer"))
@@ -155,33 +199,7 @@ public class PlayerView implements View, Disposable, GestureListener,
 				layer.setVisible (false);
 			}
 		}
-		tileSize =
-				map.getTileSets ().getTile (1).getTextureRegion ()
-						.getRegionWidth ();
-		TiledMapTileLayer mapLayer =
-				(TiledMapTileLayer) (map.getLayers ().get (0));
-		int mapWidth = mapLayer.getWidth ();
-		int mapHeight = mapLayer.getHeight ();
-		currentPlayer = 0;
-		selectedUnit = - 1;
-		units = new ArrayList <GUnite> ();
-		batch = new SpriteBatch ();
-		renderer = new OrthogonalTiledMapRenderer (map, 1.0f / tileSize, batch);
-		float w = Gdx.graphics.getWidth ();
-		float h = Gdx.graphics.getHeight ();
-		cam = new Camera (30.0f, 30.0f * h / w, tileSize, mapWidth, mapHeight);
-		cam.zoom (1.5f);
-		multiplexer = new InputMultiplexer ();
-		multiplexer.addProcessor (new GestureDetector (this));
-		multiplexer.addProcessor (adapter);
-		Gdx.input.setInputProcessor (multiplexer);
-		Gdx.gl.glClearColor (0, 0, 0, 1);
-		EventManager.addListener (this, EventType.UNIT_ATTACKED);
-		EventManager.addListener (this, EventType.UNIT_DESTROYED);
-		EventManager.addListener (this, EventType.UNIT_CREATED);
-		EventManager.addListener (this, EventType.CURRENT_PLAYER_CHANGED);
-		EventManager.addListener (this, EventType.WINDOW_RESIZED);
-		EventManager.addListener (this, EventType.UNIT_MOVED);
+		units.clear ();
 	}
 
 	public void handleInput ()
@@ -214,7 +232,6 @@ public class PlayerView implements View, Disposable, GestureListener,
 		{
 			unit.render (batch);
 		}
-		// TODO draw GUI
 		gui.render (batch);
 		batch.end ();
 	}
@@ -222,6 +239,13 @@ public class PlayerView implements View, Disposable, GestureListener,
 	@Override
 	public void dispose ()
 	{
+		EventManager.removeListener (this, EventType.UNIT_ATTACKED);
+		EventManager.removeListener (this, EventType.UNIT_DESTROYED);
+		EventManager.removeListener (this, EventType.UNIT_CREATED);
+		EventManager.removeListener (this, EventType.CURRENT_PLAYER_CHANGED);
+		EventManager.removeListener (this, EventType.WINDOW_RESIZED);
+		EventManager.removeListener (this, EventType.UNIT_MOVED);
+		EventManager.removeListener (this, EventType.LOAD_MAP);
 		renderer.dispose ();
 		map.dispose ();
 	}
@@ -260,9 +284,17 @@ public class PlayerView implements View, Disposable, GestureListener,
 		case UNIT_MOVED :
 			handleUnitMoved ((UnitMovedEvent) e);
 			break;
+		case LOAD_MAP:
+			handleLoadMap ((LoadMapEvent) e);
+			break;
 		default :
 			break;
 		}
+	}
+
+	private void handleLoadMap (LoadMapEvent e)
+	{
+		loadMap(e.filename);
 	}
 
 	private void handleUnitMoved (UnitMovedEvent e)
