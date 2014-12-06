@@ -1,7 +1,9 @@
 package edu.fresnostate.turnbased;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
@@ -50,6 +52,8 @@ public class PlayerView implements View, Disposable, GestureListener,
 	private int							selectedUnit;
 	private GuiManager					gui;
 	private PathfindingMap				pathMap;
+	private Queue <Event>				animationQueue;
+	private boolean						animating;
 	private InputAdapter				adapter				=
 																	new InputAdapter ()
 																	{
@@ -192,6 +196,8 @@ public class PlayerView implements View, Disposable, GestureListener,
 		currentPlayer = 0;
 		selectedUnit = - 1;
 		gui = new GuiManager ();
+		animationQueue = new LinkedList <Event> ();
+		animating = false;
 		pathMap = null;
 		Gdx.gl.glClearColor (0, 0, 0, 1);
 		loadMap (mapFilename);
@@ -224,6 +230,7 @@ public class PlayerView implements View, Disposable, GestureListener,
 		EventManager.addListener (this, EventType.WINDOW_RESIZED);
 		EventManager.addListener (this, EventType.UNIT_MOVED);
 		EventManager.addListener (this, EventType.LOAD_MAP);
+		EventManager.addListener (this, EventType.ANIMATION_FINISHED);
 	}
 
 	private void loadMap (String mapFilename)
@@ -313,6 +320,7 @@ public class PlayerView implements View, Disposable, GestureListener,
 		EventManager.removeListener (this, EventType.WINDOW_RESIZED);
 		EventManager.removeListener (this, EventType.UNIT_MOVED);
 		EventManager.removeListener (this, EventType.LOAD_MAP);
+		EventManager.removeListener (this, EventType.ANIMATION_FINISHED);
 		renderer.dispose ();
 		map.dispose ();
 	}
@@ -320,12 +328,35 @@ public class PlayerView implements View, Disposable, GestureListener,
 	@Override
 	public void update ()
 	{
+		if ( ! animating)
+		{
+			handleNextAnimation ();
+		}
 		for (GUnite unit : units)
 		{
 			unit.update ();
 		}
 		handleInput ();
 		cam.update ();
+	}
+
+	private void handleNextAnimation ()
+	{
+		Event e = animationQueue.poll ();
+		if (e != null)
+		{
+			switch (e.getEventType ())
+			{
+			case UNIT_MOVED :
+				handleUnitMoved ((UnitMovedEvent) e);
+				break;
+			case UNIT_ATTACKED :
+				handleUnitAttacked ((UnitAttackedEvent) e);
+				break;
+			default :
+				break;
+			}
+		}
 	}
 
 	@Override
@@ -340,7 +371,7 @@ public class PlayerView implements View, Disposable, GestureListener,
 			handleUnitDestroyed ((UnitDestroyedEvent) e);
 			break;
 		case UNIT_ATTACKED :
-			handleUnitAttacked ((UnitAttackedEvent) e);
+			animationQueue.add (e);
 			break;
 		case CURRENT_PLAYER_CHANGED :
 			handleCurrentPlayer ((CurrentPlayerChangedEvent) e);
@@ -349,10 +380,14 @@ public class PlayerView implements View, Disposable, GestureListener,
 			handleWindowResized ((WindowResizedEvent) e);
 			break;
 		case UNIT_MOVED :
-			handleUnitMoved ((UnitMovedEvent) e);
+			animationQueue.add (e);
 			break;
 		case LOAD_MAP :
 			handleLoadMap ((LoadMapEvent) e);
+			break;
+		case ANIMATION_FINISHED :
+			animating = false;
+			handleNextAnimation ();
 			break;
 		default :
 			break;
@@ -366,6 +401,7 @@ public class PlayerView implements View, Disposable, GestureListener,
 
 	private void handleUnitMoved (UnitMovedEvent e)
 	{
+		animating = true;
 		if (selectedUnit == e.unitID)
 		{
 			updatePathMap ();
