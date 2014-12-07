@@ -429,6 +429,7 @@ public class PlayerView implements View, Disposable, GestureListener,
 	{
 		GUnite deadUnit = getGUnit (e.unitID);
 		units.remove (deadUnit);
+		updatePathMap ();
 	}
 
 	private GUnite getGUnit (int id)

@@ -24,11 +24,13 @@ import edu.fresnostate.turnbased.event.LoadMapEvent;
 import edu.fresnostate.turnbased.event.MoveUnitEvent;
 import edu.fresnostate.turnbased.event.UnitAttackedEvent;
 import edu.fresnostate.turnbased.event.UnitCreatedEvent;
+import edu.fresnostate.turnbased.event.UnitDestroyedEvent;
 import edu.fresnostate.turnbased.event.UnitMovedEvent;
 import edu.fresnostate.turnbased.pathfinding.PathfindingMap;
 
 
-public class GameLogic implements EventListener, InformationProvider, Disposable
+public class GameLogic implements EventListener, InformationProvider,
+		Disposable
 {
 	private List <Player>		playerList;
 	private Map <Integer, Unit>	units;
@@ -40,7 +42,7 @@ public class GameLogic implements EventListener, InformationProvider, Disposable
 		playerList = new ArrayList <Player> ();
 		units = new HashMap <Integer, Unit> ();
 		EventManager.registerInformationProvider (this);
-		loadMap(mapFileName);
+		loadMap (mapFileName);
 		EventManager.addListener (this, EventType.LOAD_MAP);
 		EventManager.addListener (this, EventType.CREATE_UNIT);
 		EventManager.addListener (this, EventType.ATTACK_UNIT);
@@ -50,11 +52,12 @@ public class GameLogic implements EventListener, InformationProvider, Disposable
 
 	private void loadMap (String mapFileName)
 	{
-		map = new LogicMap(mapFileName);
+		map = new LogicMap (mapFileName);
 		units.clear ();
 		TiledMap tMap = EventManager.getAsset (mapFileName, TiledMap.class);
 		MapProperties mapProp = tMap.getProperties ();
-		int numPlayers = Integer.parseInt (mapProp.get ("numPlayers", String.class));
+		int numPlayers =
+				Integer.parseInt (mapProp.get ("numPlayers", String.class));
 		playerList.clear ();
 		for (int i = 0; i < numPlayers; ++ i)
 		{
@@ -66,7 +69,9 @@ public class GameLogic implements EventListener, InformationProvider, Disposable
 			{
 				TiledMapTileLayer tLayer = (TiledMapTileLayer) layer;
 				MapProperties layerProp = tLayer.getProperties ();
-				int player = Integer.parseInt (layerProp.get ("player", String.class));
+				int player =
+						Integer.parseInt (layerProp
+								.get ("player", String.class));
 				for (int x = 0; x < tLayer.getWidth (); ++ x)
 				{
 					for (int y = 0; y < tLayer.getHeight (); ++ y)
@@ -78,10 +83,13 @@ public class GameLogic implements EventListener, InformationProvider, Disposable
 							if (tile != null)
 							{
 								MapProperties tileProp = tile.getProperties ();
-								String unitType = tileProp.get ("type", String.class);
-								Unit newUnit = UnitType.create (unitType, player, x, y);
+								String unitType =
+										tileProp.get ("type", String.class);
+								Unit newUnit =
+										UnitType.create (unitType, player, x, y);
 								units.put (newUnit.UnitId, newUnit);
-								EventManager.queueEvent (new UnitCreatedEvent (newUnit.UnitId));
+								EventManager.queueEvent (new UnitCreatedEvent (
+										newUnit.UnitId));
 							}
 						}
 					}
@@ -117,7 +125,7 @@ public class GameLogic implements EventListener, InformationProvider, Disposable
 
 	private void handleLoadMap (LoadMapEvent e)
 	{
-		loadMap(e.filename);
+		loadMap (e.filename);
 	}
 
 	private void handleMoveUnit (MoveUnitEvent e)
@@ -138,13 +146,19 @@ public class GameLogic implements EventListener, InformationProvider, Disposable
 
 	private void handleAttackUnit (AttackUnitEvent e)
 	{
-		Unit unit = getUnit (e.targetID);
+		Unit unit = getUnit(e.targetID);
 		Unit attacker = getUnit (e.attackerID);
-		if (unit.player == Currentplayer && attacker.isInRange (e.targetID))
+		if (attacker.player == Currentplayer && attacker.isInRange (e.targetID))
 		{
 			attacker.attack (e.targetID);
 			EventManager.queueEvent (new UnitAttackedEvent (e.attackerID,
 					e.targetID));
+			if(unit.GetCurentHP () <= 0)
+			{
+				units.remove (unit);
+				getMapTile (unit.x, unit.y).unitOnID = -1;
+				EventManager.queueEvent (new UnitDestroyedEvent (unit.UnitId));
+			}
 		}
 	}
 
