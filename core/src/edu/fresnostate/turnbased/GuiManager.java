@@ -67,10 +67,12 @@ public class GuiManager implements Disposable
 		});
 		
 		//buttonEnd.sizeBy(buttonEnd.getWidth()/2,buttonEnd.getHeight()/2);
-		buttonEnd.pad (10);
+		buttonEnd.pad (7);
 		table.left();
-		table.add (buttonEnd);
+		table.bottom();
 		
+		table.add (buttonEnd);
+	
 		stage.addActor (table);
 		
 		
