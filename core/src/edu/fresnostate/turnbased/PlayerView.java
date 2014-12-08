@@ -139,7 +139,7 @@ public class PlayerView implements View, Disposable, GestureListener,
 		else if (selectedUnit >= 0)
 		{
 			Unit unit = EventManager.getUnit (selectedUnit);
-			if (unit.player == currentPlayer
+			if (unit.player == currentPlayer && pathMap != null
 					&& pathMap.hasPathTo (gameX, gameY))
 			{
 				MoveUnitEvent event =
@@ -274,7 +274,7 @@ public class PlayerView implements View, Disposable, GestureListener,
 		cam.applyRenderer (renderer);
 		renderer.render ();
 		batch.begin ();
-		if (pathMap != null)
+		if (selectedUnit >= 0)
 		{
 			Texture moveImage =
 					EventManager.getAsset ("movehighlight.png", Texture.class);
@@ -295,7 +295,7 @@ public class PlayerView implements View, Disposable, GestureListener,
 							batch.draw (attackImage, x, y, 1, 1);
 						}
 					}
-					else if (pathMap.hasPathTo (x, y))
+					else if (pathMap != null && pathMap.hasPathTo (x, y))
 					{
 						batch.draw (moveImage, x, y, 1, 1);
 					}
@@ -430,6 +430,7 @@ public class PlayerView implements View, Disposable, GestureListener,
 	private void handleCurrentPlayer (CurrentPlayerChangedEvent e)
 	{
 		currentPlayer = e.newPlayer;
+		updatePathMap ();
 	}
 
 	private void handleUnitAttacked (UnitAttackedEvent e)
@@ -472,8 +473,8 @@ public class PlayerView implements View, Disposable, GestureListener,
 
 	private void updatePathMap ()
 	{
-		if (selectedUnit >= 0
-				&& EventManager.getUnit (selectedUnit).player == currentPlayer)
+		Unit unit = EventManager.getUnit (selectedUnit);
+		if (selectedUnit >= 0 && unit.player == currentPlayer && ! unit.moved)
 		{
 			pathMap = EventManager.getPathMap (selectedUnit);
 		}
