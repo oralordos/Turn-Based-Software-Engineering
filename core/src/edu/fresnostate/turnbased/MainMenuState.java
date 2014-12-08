@@ -3,7 +3,10 @@ package edu.fresnostate.turnbased;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -26,7 +29,8 @@ public class MainMenuState implements GameState
 	private BitmapFont		white, black;			// done
 	private Label			heading;
 	private Game			 game;
-	
+	private SpriteBatch		batch;
+	private Sprite			menupic;
 	
 	public MainMenuState(Game g) {
 		game = g;
@@ -38,8 +42,12 @@ public class MainMenuState implements GameState
 	{
 		Gdx.gl.glClearColor (0, 0, 0, 1);
 		Gdx.gl.glClear (GL20.GL_COLOR_BUFFER_BIT);
-		// Table.drawDebug(stage);
+		
+		batch.begin();
+		menupic.draw(batch);
+		batch.end();
 		stage.draw ();
+		
 	}
 
 	@Override
@@ -53,9 +61,20 @@ public class MainMenuState implements GameState
 		// table.debug();
 		table.setBounds (0, 0, Gdx.graphics.getWidth (),
 				Gdx.graphics.getHeight ());
+		
+		//Creating Menu Background
+		batch = new SpriteBatch();
+		
+		Texture Menutexture = new Texture("ui/menuscreen.png");
+		menupic = new Sprite(Menutexture);
+		menupic.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		
+		
+		
 		// Creating Fonts
 		black = new BitmapFont (Gdx.files.internal ("font/black.fnt"), false);
 		white = new BitmapFont (Gdx.files.internal ("font/white.fnt"), false);
+		
 		// Creating Buttons
 		TextButtonStyle textButtonStyle = new TextButtonStyle ();
 		textButtonStyle.up = skin.getDrawable ("button.up");
@@ -64,6 +83,7 @@ public class MainMenuState implements GameState
 		textButtonStyle.pressedOffsetY = - 2;
 		textButtonStyle.font = black;
 		buttonPlay = new TextButton ("PLAY", textButtonStyle);
+		
 		// Setting up Button START functionality
 		buttonPlay.addListener (new ClickListener ()
 		{
@@ -75,6 +95,7 @@ public class MainMenuState implements GameState
 			}
 		});
 		buttonPlay.pad (20);
+		
 		// Setting up Button Exit functionality
 		buttonExit = new TextButton ("EXIT", textButtonStyle);
 		buttonExit.addListener (new ClickListener ()
@@ -86,10 +107,13 @@ public class MainMenuState implements GameState
 			}
 		});
 		buttonExit.pad (20);
+		
 		// Creating Heading
 		LabelStyle headingStyle = new LabelStyle (white, Color.WHITE);
-		heading = new Label ("THE RPG GAME", headingStyle);
-		heading.setFontScale (2);
+		heading = new Label ("Days of War : The Coming Apocalypse", headingStyle);
+		heading.setFontScale(3/2,2);
+		heading.setColor(Color.RED);
+	
 		// Putting Stuff Together
 		table.add (heading);
 		table.row ();
