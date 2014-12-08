@@ -1,6 +1,8 @@
 package edu.fresnostate.turnbased;
 
+import java.lang.annotation.Target;
 import java.util.List;
+
 import edu.fresnostate.turnbased.event.EventManager;
 
 
@@ -22,7 +24,6 @@ public class Unit
 		Range= type.UnitRang;
 		this.x = x;
 		this.y = y;
-		sum=x+y;
 		EventManager.getMapTile(x, y).unitOnID=id;
 	}
 
@@ -38,7 +39,9 @@ public class Unit
 	public void attack (int targetId )
 	{
 		
-		UnitcurentHP -= type.UnitAD   ;
+		Unit target = EventManager.getUnit(targetId);
+        target.UnitcurentHP -= type.UnitAD;
+		
 	}
 
 	public void capture ()
@@ -49,10 +52,27 @@ public class Unit
 	public boolean isInRange (int targetId)
 	{
 		
-		
-		if (Range==sum)
+		int dx;
+		int dy;
+		Unit target = EventManager.getUnit(targetId);
+		//Math.abs(dx) + Math.abs(dy) <= type.range;
+		//where 
+		//dx = x - target.x and dy = y - target.y;
+		dx=x-target.x;
+		dy=y-target.y;
+		if(dx<0)
 		{
-			return true ;
+		dx=-dx;	
+		}
+		if(dy<0)
+		{
+			dy=-dy;
+		}
+		//sum=(x-target.x)+(y-target.y);
+		sum=dx+dy;
+		if(sum<= Range) 
+		{
+		return true ;
 		}
 		else
 		{
