@@ -8,12 +8,10 @@ import edu.fresnostate.turnbased.event.EventManager;
 public class Unit
 {
 	public final UnitType	type;
-	public int				player;
+	public final int		player;
 	private int				UnitcurentHP;
-	private int 			Range;
 	public final int		UnitId;
 	public int				x, y;
-	private int 			sum;
 	boolean					moved;
 	boolean					attacked;
 	public Unit (UnitType unitType, int player, int id, int x, int y)
@@ -22,7 +20,6 @@ public class Unit
 		this.player = player;
 		UnitId = id;
 		UnitcurentHP = type.UnitBaseHP;
-		Range= type.UnitRang;
 		this.x = x;
 		this.y = y;
 		EventManager.getMapTile(x, y).unitOnID=id;
@@ -77,8 +74,8 @@ public class Unit
 				dy=-dy;
 			}
 		
-			sum=dx+dy;
-			if(sum<= Range) 
+			int sum=dx+dy;
+			if(sum<= type.UnitRang) 
 			{
 				return true ;
 			}
