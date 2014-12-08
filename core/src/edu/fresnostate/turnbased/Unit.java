@@ -48,7 +48,7 @@ public class Unit
 
 	public boolean isInRange (int targetId)
 	{
-		EventManager.getMapTile(x, y) ;
+		
 		
 		if (Range==sum)
 		{
