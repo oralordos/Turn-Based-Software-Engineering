@@ -110,7 +110,7 @@ public class MainMenuState implements GameState
 		
 		// Creating Heading
 		LabelStyle headingStyle = new LabelStyle (white, Color.WHITE);
-		heading = new Label ("Days of War : The Coming Apocalypse", headingStyle);
+		heading = new Label ("Days of War", headingStyle);
 		heading.setFontScale(3/2,2);
 		heading.setColor(Color.RED);
 	
