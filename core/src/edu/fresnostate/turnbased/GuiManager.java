@@ -65,8 +65,12 @@ public class GuiManager implements Disposable
 				EventManager.queueEvent(new EndTurnEvent());
 			}
 		});
-		buttonEnd.pad (20);
+		
+		//buttonEnd.sizeBy(buttonEnd.getWidth()/2,buttonEnd.getHeight()/2);
+		buttonEnd.pad (10);
+		table.left();
 		table.add (buttonEnd);
+		
 		stage.addActor (table);
 		
 		
