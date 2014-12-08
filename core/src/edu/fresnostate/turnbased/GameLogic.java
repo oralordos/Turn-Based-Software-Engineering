@@ -140,8 +140,17 @@ public class GameLogic implements EventListener, InformationProvider,
 
 	private void handleEndTurn (EndTurnEvent e)
 	{
+		
 		Currentplayer = (Currentplayer + 1) % getNumberPlayers ();
 		EventManager.queueEvent (new CurrentPlayerChangedEvent (Currentplayer));
+		for(Unit unit : units.values ())
+		{
+			
+			if(unit.player == Currentplayer)
+			{
+				unit.Heal();
+			}
+		}
 	}
 
 	private void handleAttackUnit (AttackUnitEvent e)
