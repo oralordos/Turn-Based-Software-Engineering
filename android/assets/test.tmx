@@ -5,6 +5,17 @@
  </properties>
  <tileset firstgid="1" name="Extra Medium" tilewidth="32" tileheight="32">
   <image source="Extra Medium.png" trans="ffffff" width="320" height="160"/>
+  <tile id="4">
+   <properties>
+    <property name="unitRegen" value="2"/>
+   </properties>
+  </tile>
+  <tile id="5">
+   <properties>
+    <property name="movementTread" value="0"/>
+    <property name="movementWalk" value="3"/>
+   </properties>
+  </tile>
   <tile id="6">
    <properties>
     <property name="type" value="MONSTER"/>
@@ -12,22 +23,40 @@
   </tile>
   <tile id="7">
    <properties>
-    <property name="type" value="Othertwo"/>
+    <property name="type" value="ARTILLERY"/>
    </properties>
   </tile>
   <tile id="8">
    <properties>
-    <property name="type" value="INFANTRY"/>
+    <property name="type" value="HELICOPTER"/>
+   </properties>
+  </tile>
+  <tile id="11">
+   <properties>
+    <property name="movementTread" value="2"/>
+   </properties>
+  </tile>
+  <tile id="12">
+   <properties>
+    <property name="movementSail" value="1"/>
+    <property name="movementTread" value="0"/>
+    <property name="movementWalk" value="0"/>
+   </properties>
+  </tile>
+  <tile id="14">
+   <properties>
+    <property name="movementTread" value="3"/>
+    <property name="movementWalk" value="2"/>
    </properties>
   </tile>
   <tile id="16">
    <properties>
-    <property name="type" value="MONSTER"/>
+    <property name="type" value="SNAKES"/>
    </properties>
   </tile>
   <tile id="17">
    <properties>
-    <property name="type" value="TANK"/>
+    <property name="type" value="CAR"/>
    </properties>
   </tile>
  </tileset>

@@ -6,11 +6,12 @@ import java.util.Map;
 
 public enum UnitType
 {
-	INFANTRY (10, 2, 3, 4, 1, 200, 200, MovementType.WALK, "Extra Medium.png", 8, 0),
-	TANK (10, 4, 4, 4, 1, 1000, 500, MovementType.TREAD, "Extra Medium.png", 7, 0),
-	MONSTER (10, 3, 4, 5, 2, 500, 1200, MovementType.FLY, "Extra Medium.png", 6, 0),
-	OtherOne (10, 2, 3, 4, 1, 200, 200, MovementType.WALK, "Extra Medium.png", 8, 0),
-	Othertwo (10, 4, 4, 4, 1, 1000, 500, MovementType.TREAD, "Extra Medium.png", 7, 0);
+	        //   hp def att mov ran mon food
+	HELICOPTER ( 7,  1,  3,  5,  2, 200, 200, MovementType.FLY, "Extra Medium.png", 8, 0),
+	ARTILLERY  (10,  1,  7,  3,  5, 1000, 500, MovementType.TREAD, "Extra Medium.png", 7, 0),
+	MONSTER    (20,  0,  3,  3,  1, 500, 1200, MovementType.WALK, "Extra Medium.png", 6, 0),
+	CAR        (15,  3,  4,  4,  2, 200, 200, MovementType.WALK, "Extra Medium.png", 7, 1),
+	SNAKES     ( 4,  0,  6,  8,  1, 1000, 500, MovementType.TREAD, "Extra Medium.png", 6, 1);
 	final int							UnitBaseHP;
 	final int							UnitAD;
 	final int							UnitMovement;
