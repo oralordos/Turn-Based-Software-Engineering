@@ -56,14 +56,31 @@ public class GUnite
 
 	public void render (SpriteBatch batch)
 	{
-		batch.setColor (color);
+		Unit unit = EventManager.getUnit(UniteID);
+		if (dead)
+		{
+			batch.setColor (color);
+		}
+		else if(unit.moved)
+		{
+			if(unit.attacked)
+			{
+				batch.setColor (0.3f, 0.3f, 0.3f, 1.0f);
+			}
+			else
+			{
+				batch.setColor (0.7f, 0.7f, 0.7f, 1.0f);
+			}
+		}
 		batch.draw (image, x, y, 1, 1);
-		batch.setColor (Color.WHITE);
+		if (dead || unit.moved || unit.attacked)
+		{
+			batch.setColor (Color.WHITE);
+		}
 		if ( ! dead)
 		{
 			batch.draw (teamIndicator, x, y, indicatorSize, indicatorSize);
 			batch.draw (redHealth, x, y + 0.9f, 1, 0.1f);
-			Unit unit = EventManager.getUnit (UniteID);
 			float percentHealth =
 					unit.GetCurentHP () / (float) unit.type.UnitBaseHP;
 			batch.draw (greenHealth, x, y + 0.9f,

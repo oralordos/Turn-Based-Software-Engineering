@@ -1,6 +1,5 @@
 package edu.fresnostate.turnbased;
 
-import java.lang.annotation.Target;
 import java.util.List;
 
 import edu.fresnostate.turnbased.event.EventManager;
@@ -15,8 +14,8 @@ public class Unit
 	public final int		UnitId;
 	public int				x, y;
 	private int 			sum;
-	int 					moved;
-	int						attacked;
+	boolean					moved;
+	boolean					attacked;
 	public Unit (UnitType unitType, int player, int id, int x, int y)
 	{
 		type = unitType;
@@ -27,8 +26,8 @@ public class Unit
 		this.x = x;
 		this.y = y;
 		EventManager.getMapTile(x, y).unitOnID=id;
-		moved=0;
-		attacked=0;
+		moved=false;
+		attacked=false;
 	}
 
 	public void Move (List <Coordinates <Integer>> path)
@@ -38,7 +37,7 @@ public class Unit
 		x = lastSpace.x;
 		y = lastSpace.y;
 		EventManager.getMapTile(x, y).unitOnID=UnitId;
-		moved=moved+1;
+		moved=true;
 	}
 
 	public void attack (int targetId )
@@ -46,7 +45,8 @@ public class Unit
 		
 		Unit target = EventManager.getUnit(targetId);
         target.UnitcurentHP -= type.UnitAD;
-		attacked=attacked+1;
+		attacked=true;
+		moved = true;
 	}
 
 	public void capture ()
@@ -60,7 +60,7 @@ public class Unit
 		int dx;
 		int dy;
 		Unit target = EventManager.getUnit(targetId);
-		if(attacked==1)
+		if(attacked)
 		{
 			return false;
 		}
@@ -113,7 +113,7 @@ public class Unit
 
 	public boolean CanpathOn (List <Coordinates <Integer>> path)
 	{
-		if(moved==1)
+		if(moved || attacked)
 		{
 			return false;
 		}

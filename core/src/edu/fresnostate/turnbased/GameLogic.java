@@ -145,8 +145,8 @@ public class GameLogic implements EventListener, InformationProvider,
 		EventManager.queueEvent (new CurrentPlayerChangedEvent (Currentplayer));
 		for(Unit unit : units.values ())
 		{
-			unit.attacked=0;
-			unit.moved=0;
+			unit.attacked=false;
+			unit.moved=false;
 			if(unit.player == Currentplayer)
 			{
 				unit.Heal();
