@@ -200,7 +200,6 @@ public class PlayerView implements View, Disposable, GestureListener,
 		pathMap = null;
 		Gdx.gl.glClearColor (0, 0, 0, 1);
 		loadMap (mapFilename);
-		gui = new GuiManager ();
 		// Find tile size
 		tileSize =
 				map.getTileSets ().getTile (1).getTextureRegion ()
@@ -219,6 +218,7 @@ public class PlayerView implements View, Disposable, GestureListener,
 		cam.zoom (1.5f);
 		// Setup input
 		multiplexer = new InputMultiplexer ();
+		gui = new GuiManager (multiplexer);
 		multiplexer.addProcessor (new GestureDetector (this));
 		multiplexer.addProcessor (adapter);
 		Gdx.input.setInputProcessor (multiplexer);
@@ -333,15 +333,15 @@ public class PlayerView implements View, Disposable, GestureListener,
 		{
 			handleNextAnimation ();
 		}
-		List<GUnite> deadUnits = new ArrayList<GUnite>();
+		List <GUnite> deadUnits = new ArrayList <GUnite> ();
 		for (GUnite unit : units)
 		{
-			if(unit.update ())
+			if (unit.update ())
 			{
-				deadUnits.add(unit);
+				deadUnits.add (unit);
 			}
 		}
-		for(GUnite unit : deadUnits)
+		for (GUnite unit : deadUnits)
 		{
 			units.remove (unit);
 		}
@@ -443,7 +443,7 @@ public class PlayerView implements View, Disposable, GestureListener,
 	{
 		animating = true;
 		GUnite deadUnit = getGUnit (e.unitID);
-		deadUnit.destroy();
+		deadUnit.destroy ();
 		updatePathMap ();
 	}
 
