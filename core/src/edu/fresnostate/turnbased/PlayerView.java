@@ -195,12 +195,12 @@ public class PlayerView implements View, Disposable, GestureListener,
 		batch = new SpriteBatch ();
 		currentPlayer = 0;
 		selectedUnit = - 1;
-		gui = new GuiManager ();
 		animationQueue = new LinkedList <Event> ();
 		animating = false;
 		pathMap = null;
 		Gdx.gl.glClearColor (0, 0, 0, 1);
 		loadMap (mapFilename);
+		gui = new GuiManager ();
 		// Find tile size
 		tileSize =
 				map.getTileSets ().getTile (1).getTextureRegion ()
@@ -321,6 +321,7 @@ public class PlayerView implements View, Disposable, GestureListener,
 		EventManager.removeListener (this, EventType.UNIT_MOVED);
 		EventManager.removeListener (this, EventType.LOAD_MAP);
 		EventManager.removeListener (this, EventType.ANIMATION_FINISHED);
+		gui.dispose ();
 		renderer.dispose ();
 		map.dispose ();
 	}
@@ -336,6 +337,7 @@ public class PlayerView implements View, Disposable, GestureListener,
 		{
 			unit.update ();
 		}
+		gui.update ();
 		handleInput ();
 		cam.update ();
 	}
@@ -422,7 +424,8 @@ public class PlayerView implements View, Disposable, GestureListener,
 
 	private void handleUnitAttacked (UnitAttackedEvent e)
 	{
-		// TODO Run attack animation when done.
+		GUnite attacker = getGUnit (e.attackerID);
+		attacker.attack (getGUnit (e.targetID));
 	}
 
 	private void handleUnitDestroyed (UnitDestroyedEvent e)

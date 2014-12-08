@@ -1,5 +1,6 @@
 package edu.fresnostate.turnbased;
 
+import java.util.ArrayList;
 import java.util.List;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -7,24 +8,25 @@ import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 import edu.fresnostate.turnbased.event.AnimationFinishedEvent;
 import edu.fresnostate.turnbased.event.EventManager;
 
 
 public class GUnite
 {
-	public final int						UniteID;
-	private float							x;
-	private float							y;
-	private TextureRegion					image;
-	private List <Coordinates <Integer>>	currentPath;
-	private Texture							teamIndicator;
-	private float							indicatorSize;
-	private static Texture [ ]				teamIndicators			= null;
-	private static Texture					redHealth				= null;
-	private static Texture					greenHealth				= null;
-	private static final float				MOVEMENT_SPEED			= 0.25f;
-	private static final int				INDICATOR_PIXEL_SIZE	= 4;
+	public final int					UniteID;
+	private float						x;
+	private float						y;
+	private TextureRegion				image;
+	private List <Coordinates <Float>>	currentPath;
+	private Texture						teamIndicator;
+	private float						indicatorSize;
+	private static Texture [ ]			teamIndicators			= null;
+	private static Texture				redHealth				= null;
+	private static Texture				greenHealth				= null;
+	private static final float			MOVEMENT_SPEED			= 0.25f;
+	private static final int			INDICATOR_PIXEL_SIZE	= 4;
 
 	public GUnite (int UniteID, float x, float y, int tileSize)
 	{
@@ -61,7 +63,7 @@ public class GUnite
 	{
 		if (currentPath != null)
 		{
-			Coordinates <Integer> nextSpot = currentPath.get (0);
+			Coordinates <Float> nextSpot = currentPath.get (0);
 			float dx = nextSpot.x - x;
 			float dy = nextSpot.y - y;
 			if (Math.abs (dx) > MOVEMENT_SPEED)
@@ -94,7 +96,22 @@ public class GUnite
 
 	public void move (List <Coordinates <Integer>> path)
 	{
-		currentPath = path;
+		currentPath = convertPath (path);
+	}
+
+	private List <Coordinates <Float>> convertPath (
+			List <Coordinates <Integer>> path)
+	{
+		List <Coordinates <Float>> newPath =
+				new ArrayList <Coordinates <Float>> (path.size ());
+		for (Coordinates <Integer> node : path)
+		{
+			Coordinates <Float> newNode =
+					new Coordinates <Float> (node.x.floatValue (),
+							node.y.floatValue ());
+			newPath.add (newNode);
+		}
+		return newPath;
 	}
 
 	private static void preloadIndicators ()
@@ -132,5 +149,18 @@ public class GUnite
 		green.setColor (Color.GREEN);
 		green.fill ();
 		greenHealth = new Texture (green);
+	}
+
+	public void attack (GUnite target)
+	{
+		List <Coordinates <Float>> newPath =
+				new ArrayList <Coordinates <Float>> ();
+		Vector2 vec = new Vector2 (target.x, target.y);
+		vec.sub (x, y).nor ().scl (0.75f).add (x, y);
+		Coordinates <Float> halfPoint = new Coordinates <Float> (vec.x, vec.y);
+		Coordinates <Float> originalPoint = new Coordinates <Float> (x, y);
+		newPath.add (halfPoint);
+		newPath.add (originalPoint);
+		currentPath = newPath;
 	}
 }
