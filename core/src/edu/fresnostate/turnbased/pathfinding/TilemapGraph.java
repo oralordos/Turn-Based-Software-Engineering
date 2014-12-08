@@ -19,11 +19,6 @@ public class TilemapGraph implements Graph
 		this.currentMovement = currentMovement;
 	}
 
-	public void setCurrentMovement (MovementType currentMovement)
-	{
-		this.currentMovement = currentMovement;
-	}
-
 	public int generalize (final int x, final int y)
 	{
 		return x * map.getWidth () + y;

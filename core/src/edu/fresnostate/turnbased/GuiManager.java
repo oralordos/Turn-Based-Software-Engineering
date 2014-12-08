@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -27,9 +26,7 @@ public class GuiManager implements Disposable
 	private Skin			skin;	
 	private Table			table;	
 	private TextButton		buttonEnd;
-	private BitmapFont		white, black;			
-	private Label			heading;
-	private Game 			game;
+	private BitmapFont		white, black;
 	
 	
 	public GuiManager(InputMultiplexer multiplex)
