@@ -55,9 +55,7 @@ public class Unit
 		int dx;
 		int dy;
 		Unit target = EventManager.getUnit(targetId);
-		//Math.abs(dx) + Math.abs(dy) <= type.range;
-		//where 
-		//dx = x - target.x and dy = y - target.y;
+		
 		dx=x-target.x;
 		dy=y-target.y;
 		if(dx<0)
@@ -68,7 +66,7 @@ public class Unit
 		{
 			dy=-dy;
 		}
-		//sum=(x-target.x)+(y-target.y);
+		
 		sum=dx+dy;
 		if(sum<= Range) 
 		{
