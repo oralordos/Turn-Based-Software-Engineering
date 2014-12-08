@@ -9,17 +9,20 @@ public class Unit
 	public final UnitType	type;
 	public int				player;
 	private int				UnitcurentHP;
+	private int 			Range;
 	public final int		UnitId;
 	public int				x, y;
-
+	private int 			sum;
 	public Unit (UnitType unitType, int player, int id, int x, int y)
 	{
 		type = unitType;
 		this.player = player;
 		UnitId = id;
 		UnitcurentHP = type.UnitBaseHP;
+		Range= type.UnitRang;
 		this.x = x;
 		this.y = y;
+		sum=x+y;
 		EventManager.getMapTile(x, y).unitOnID=id;
 	}
 
@@ -32,9 +35,10 @@ public class Unit
 		EventManager.getMapTile(x, y).unitOnID=UnitId;
 	}
 
-	public void attack (int targetId)
+	public void attack (int targetId )
 	{
-		// TODO Decrease the target's hp due to an attack.
+		
+		UnitcurentHP -= type.UnitAD   ;
 	}
 
 	public void capture ()
@@ -44,8 +48,16 @@ public class Unit
 
 	public boolean isInRange (int targetId)
 	{
-		// TODO Check if the other unit is in range of this unit.
+		EventManager.getMapTile(x, y) ;
+		
+		if (Range==sum)
+		{
+			return true ;
+		}
+		else
+		{
 		return false;
+		}
 	}
 
 	public void Undomove ()
