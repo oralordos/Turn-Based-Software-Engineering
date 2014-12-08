@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" width="30" height="20" tilewidth="32" tileheight="32">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="30" height="20" tilewidth="32" tileheight="32">
  <properties>
   <property name="numPlayers" value="2"/>
  </properties>
@@ -10,9 +10,24 @@
     <property name="type" value="MONSTER"/>
    </properties>
   </tile>
+  <tile id="7">
+   <properties>
+    <property name="type" value="Othertwo"/>
+   </properties>
+  </tile>
   <tile id="8">
    <properties>
     <property name="type" value="INFANTRY"/>
+   </properties>
+  </tile>
+  <tile id="16">
+   <properties>
+    <property name="type" value="MONSTER"/>
+   </properties>
+  </tile>
+  <tile id="17">
+   <properties>
+    <property name="type" value="TANK"/>
    </properties>
   </tile>
  </tileset>
@@ -21,7 +36,12 @@
  </tileset>
  <layer name="Tile Layer" width="30" height="20">
   <data encoding="base64" compression="zlib">
-   eJztzbENACAIBMBnAPdf195oFHgwIRRXnwAQhUGiOZm35WX8ntfzM17Lz3w1N/t9/aPe2x/9nu6Md3dXf9c/+5WPb2vVTPevB7E=
+   eJzV1bEOABAMRdHa+f/ftTdCX3MrDI2BONoKw8yGi7YJv5aKnVllR0zKVy3KJ9yMT7qKTbtRv8o9+cTePWET5sld2ZSr5kzVWc37Rn/9/I37HDlXlRntAdmT7kbVzNqZfF98X3/9UyY/XQqd
+  </data>
+ </layer>
+ <layer name="Tile Layer 4" width="30" height="20">
+  <data encoding="base64" compression="zlib">
+   eJzNlEsKwCAMRN3Urfe/bTcVhiH/VNqAKGry1Ewc45+2nvYV9yTfii2tzQNMiS9xO2/A7+jFwr0dtpa/SLzZYHd1s7lv687TG+7xNCKZpc9ozvkcEeZuVavmK8PO1LnHxD7KQX/Ul3R3706ZM3Mt45yUb4ttMTXOgDmtnpGdtchbMPcif47XYU8aa+ez6j3K5jFqU/tHlrBe5Us+WmzObeePrvyNNw6IB1M=
   </data>
  </layer>
  <layer name="Unit Layer 0" width="30" height="20">
@@ -29,7 +49,7 @@
    <property name="player" value="0"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJxjYBgFo2BgAedAO2CYgsEWroPNPaNgFIyCUUBLAAClVAAc
+   eJxjYBgFgwVwDLQDBghwDrQDaASEsIjRM44HW7jS2z3Ywp+WgN75l97+GwWjYBSQBgAzSgBq
   </data>
  </layer>
  <layer name="Unit Layer 1" width="30" height="20">
@@ -37,7 +57,7 @@
    <property name="player" value="1"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJxjYBgFo2AUDGbAPkLtHgWjYBSMgqEMAFZEAA8=
+   eJxjYBgFo2AU4AKCA+0AIGCns33Ifqa33QMJBkNcDxSgRzyjhy+9w3ug0jK6vbR0Bz6zYXK0DHf0soNWfh0seRXZf9jcBABmVgDn
   </data>
  </layer>
 </map>
