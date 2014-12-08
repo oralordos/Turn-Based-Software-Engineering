@@ -15,6 +15,8 @@ public class Unit
 	public final int		UnitId;
 	public int				x, y;
 	private int 			sum;
+	int 					moved;
+	int						attacked;
 	public Unit (UnitType unitType, int player, int id, int x, int y)
 	{
 		type = unitType;
@@ -25,6 +27,8 @@ public class Unit
 		this.x = x;
 		this.y = y;
 		EventManager.getMapTile(x, y).unitOnID=id;
+		moved=0;
+		attacked=0;
 	}
 
 	public void Move (List <Coordinates <Integer>> path)
@@ -34,6 +38,7 @@ public class Unit
 		x = lastSpace.x;
 		y = lastSpace.y;
 		EventManager.getMapTile(x, y).unitOnID=UnitId;
+		moved=moved+1;
 	}
 
 	public void attack (int targetId )
@@ -41,7 +46,7 @@ public class Unit
 		
 		Unit target = EventManager.getUnit(targetId);
         target.UnitcurentHP -= type.UnitAD;
-		
+		attacked=attacked+1;
 	}
 
 	public void capture ()
@@ -55,29 +60,35 @@ public class Unit
 		int dx;
 		int dy;
 		Unit target = EventManager.getUnit(targetId);
-		
-		dx=x-target.x;
-		dy=y-target.y;
-		if(dx<0)
+		if(attacked==1)
 		{
-		dx=-dx;	
-		}
-		if(dy<0)
-		{
-			dy=-dy;
-		}
-		
-		sum=dx+dy;
-		if(sum<= Range) 
-		{
-		return true ;
+			return false;
 		}
 		else
 		{
-		return false;
+			dx=x-target.x;
+			dy=y-target.y;
+			if(dx<0)
+			{
+				dx=-dx;	
+			}
+			if(dy<0)
+			{
+				dy=-dy;
+			}
+		
+			sum=dx+dy;
+			if(sum<= Range) 
+			{
+				return true ;
+			}
+			else
+			{
+				return false;
+			}
 		}
-	}
-
+		}
+		
 	public void Undomove ()
 	{
 		// TODO Undo the last move if the unit has moved this turn but has not acted yet.
@@ -95,14 +106,22 @@ public class Unit
 
 	public boolean CanpathOn (List <Coordinates <Integer>> path)
 	{
-		int movedSoFar = 0;
-		for (Coordinates <Integer> currentPoint : path)
+		if(moved==1)
 		{
-			Tile tile =
-					EventManager.getMapTile (currentPoint.x, currentPoint.y);
-			movedSoFar += tile.getmovementcost (type.movement);
+			return false;
 		}
-		return movedSoFar <= type.UnitMovement;
+		else
+		{
+			int movedSoFar = 0;
+		
+			for (Coordinates <Integer> currentPoint : path)
+			{
+				Tile tile =
+					EventManager.getMapTile (currentPoint.x, currentPoint.y);
+				movedSoFar += tile.getmovementcost (type.movement);
+			}
+			return movedSoFar <= type.UnitMovement;
+		}
 	}
 
 }
