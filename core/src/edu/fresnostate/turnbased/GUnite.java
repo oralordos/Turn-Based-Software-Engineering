@@ -63,11 +63,12 @@ public class GUnite
 		{
 			batch.draw (teamIndicator, x, y, indicatorSize, indicatorSize);
 			batch.draw (redHealth, x, y + 0.9f, 1, 0.1f);
+			Unit unit = EventManager.getUnit (UniteID);
+			float percentHealth =
+					unit.GetCurentHP () / (float) unit.type.UnitBaseHP;
+			batch.draw (greenHealth, x, y + 0.9f,
+					Math.max (percentHealth, 0.0f), 0.1f);
 		}
-		Unit unit = EventManager.getUnit (UniteID);
-		float percentHealth =
-				unit.GetCurentHP () / (float) unit.type.UnitBaseHP;
-		batch.draw (greenHealth, x, y + 0.9f, percentHealth, 0.1f);
 	}
 
 	public boolean update ()
