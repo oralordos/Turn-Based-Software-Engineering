@@ -6,6 +6,7 @@ import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import edu.fresnostate.turnbased.event.EventManager;
 import edu.fresnostate.turnbased.pathfinding.DijkstraMap;
 import edu.fresnostate.turnbased.pathfinding.PathfindingMap;
@@ -15,10 +16,10 @@ import edu.fresnostate.turnbased.pathfinding.TilemapGraph;
 public class LogicMap
 {
 	private Tile	tiles [ ][ ];
-	
-	public LogicMap(String filename)
+
+	public LogicMap (String filename)
 	{
-		loadMap(EventManager.getAsset (filename, TiledMap.class));
+		loadMap (EventManager.getAsset (filename, TiledMap.class));
 	}
 
 	public void loadMap (TiledMap t)
@@ -46,8 +47,16 @@ public class LogicMap
 				{
 					for (int y = 0; y < tileLayer.getHeight (); ++ y)
 					{
-						TiledMapTile tile = tileLayer.getCell (x, y).getTile ();
-						tiles [x] [y].updateData (tile.getProperties ());
+						Cell cell = tileLayer.getCell (x, y);
+						if (cell != null)
+						{
+							TiledMapTile tile = cell.getTile ();
+							if (tile != null)
+							{
+								tiles [x] [y]
+										.updateData (tile.getProperties ());
+							}
+						}
 					}
 				}
 			}
