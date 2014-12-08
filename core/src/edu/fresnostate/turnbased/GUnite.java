@@ -22,11 +22,15 @@ public class GUnite
 	private List <Coordinates <Float>>	currentPath;
 	private Texture						teamIndicator;
 	private float						indicatorSize;
-	private static Texture [ ]			teamIndicators			= null;
-	private static Texture				redHealth				= null;
-	private static Texture				greenHealth				= null;
-	private static final float			MOVEMENT_SPEED			= 0.25f;
-	private static final int			INDICATOR_PIXEL_SIZE	= 4;
+	private boolean						dead;
+	private Color						color;
+	private static Texture [ ]			teamIndicators				= null;
+	private static Texture				redHealth					= null;
+	private static Texture				greenHealth					= null;
+	private static final float			MOVEMENT_SPEED				= 0.25f;
+	private static final int			INDICATOR_PIXEL_SIZE		= 4;
+	private static final float			COLOR_CHANGE_RATE			= 0.1f;
+	private static final float			TRANSPARENCY_CHANGE_RATE	= 0.1f;
 
 	public GUnite (int UniteID, float x, float y, int tileSize)
 	{
@@ -34,6 +38,8 @@ public class GUnite
 		this.x = x;
 		this.y = y;
 		currentPath = null;
+		color = new Color (1, 1, 1, 1);
+		dead = false;
 		Unit unit = EventManager.getUnit (UniteID);
 		UnitType type = unit.type;
 		Texture tex = EventManager.getAsset (type.imageName, Texture.class);
@@ -50,16 +56,21 @@ public class GUnite
 
 	public void render (SpriteBatch batch)
 	{
+		batch.setColor (color);
 		batch.draw (image, x, y, 1, 1);
-		batch.draw (teamIndicator, x, y, indicatorSize, indicatorSize);
-		batch.draw (redHealth, x, y + 0.9f, 1, 0.1f);
+		batch.setColor (Color.WHITE);
+		if ( ! dead)
+		{
+			batch.draw (teamIndicator, x, y, indicatorSize, indicatorSize);
+			batch.draw (redHealth, x, y + 0.9f, 1, 0.1f);
+		}
 		Unit unit = EventManager.getUnit (UniteID);
 		float percentHealth =
 				unit.GetCurentHP () / (float) unit.type.UnitBaseHP;
 		batch.draw (greenHealth, x, y + 0.9f, percentHealth, 0.1f);
 	}
 
-	public void update ()
+	public boolean update ()
 	{
 		if (currentPath != null)
 		{
@@ -92,6 +103,28 @@ public class GUnite
 				EventManager.queueEvent (new AnimationFinishedEvent ());
 			}
 		}
+		if (dead)
+		{
+			if (color.r <= 0)
+			{
+				color.r = 0;
+				color.g = 0;
+				color.b = 0;
+				color.a -= TRANSPARENCY_CHANGE_RATE;
+			}
+			else
+			{
+				color.r -= COLOR_CHANGE_RATE;
+				color.g -= COLOR_CHANGE_RATE;
+				color.b -= COLOR_CHANGE_RATE;
+			}
+			if (color.a <= 0)
+			{
+				EventManager.queueEvent (new AnimationFinishedEvent ());
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public void move (List <Coordinates <Integer>> path)
@@ -162,5 +195,10 @@ public class GUnite
 		newPath.add (halfPoint);
 		newPath.add (originalPoint);
 		currentPath = newPath;
+	}
+
+	public void destroy ()
+	{
+		dead = true;
 	}
 }

@@ -333,9 +333,17 @@ public class PlayerView implements View, Disposable, GestureListener,
 		{
 			handleNextAnimation ();
 		}
+		List<GUnite> deadUnits = new ArrayList<GUnite>();
 		for (GUnite unit : units)
 		{
-			unit.update ();
+			if(unit.update ())
+			{
+				deadUnits.add(unit);
+			}
+		}
+		for(GUnite unit : deadUnits)
+		{
+			units.remove (unit);
 		}
 		gui.update ();
 		handleInput ();
@@ -355,6 +363,9 @@ public class PlayerView implements View, Disposable, GestureListener,
 			case UNIT_ATTACKED :
 				handleUnitAttacked ((UnitAttackedEvent) e);
 				break;
+			case UNIT_DESTROYED :
+				handleUnitDestroyed ((UnitDestroyedEvent) e);
+				break;
 			default :
 				break;
 			}
@@ -370,7 +381,7 @@ public class PlayerView implements View, Disposable, GestureListener,
 			handleUnitCreated ((UnitCreatedEvent) e);
 			break;
 		case UNIT_DESTROYED :
-			handleUnitDestroyed ((UnitDestroyedEvent) e);
+			animationQueue.add (e);
 			break;
 		case UNIT_ATTACKED :
 			animationQueue.add (e);
@@ -389,7 +400,6 @@ public class PlayerView implements View, Disposable, GestureListener,
 			break;
 		case ANIMATION_FINISHED :
 			animating = false;
-			handleNextAnimation ();
 			break;
 		default :
 			break;
@@ -424,14 +434,16 @@ public class PlayerView implements View, Disposable, GestureListener,
 
 	private void handleUnitAttacked (UnitAttackedEvent e)
 	{
+		animating = true;
 		GUnite attacker = getGUnit (e.attackerID);
 		attacker.attack (getGUnit (e.targetID));
 	}
 
 	private void handleUnitDestroyed (UnitDestroyedEvent e)
 	{
+		animating = true;
 		GUnite deadUnit = getGUnit (e.unitID);
-		units.remove (deadUnit);
+		deadUnit.destroy();
 		updatePathMap ();
 	}
 
