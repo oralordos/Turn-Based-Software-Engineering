@@ -101,7 +101,14 @@ public class Unit
 
 	public void Heal ()
 	{
-		UnitcurentHP += EventManager.getMapTile (x, y).getUnitRegen ();
+		if(UnitcurentHP<type.UnitBaseHP)
+		{
+			UnitcurentHP += EventManager.getMapTile (x, y).getUnitRegen ();
+		}
+		if (UnitcurentHP>type.UnitBaseHP)
+		{
+			UnitcurentHP=type.UnitBaseHP;
+		}
 	}
 
 	public boolean CanpathOn (List <Coordinates <Integer>> path)
